@@ -109,7 +109,6 @@ void FreeList(s_expr *pos)
 
 bool CheckBrackets(const std::string str)
 {
-    string.erase(std::remove_if(string.begin(), string.end(), isspace), string.end());
     size_t open = std::count(str.begin(), str.end(), '(');
     size_t closed = std::count(str.begin(), str.end(), ')');
     if (open > closed)
@@ -169,7 +168,7 @@ void ReadT()
     std::string str;
     int count = 0, answer = 0;
     std::cout << "Введите значение" << std::endl;
-    std::cin >> str;
+    std::getline(std::cin >> std::ws, str);
     CheckBrackets(str);
     std::cout << "Depth of ( " << str << " )";
     s_expr *head = CreateList(str, count);
