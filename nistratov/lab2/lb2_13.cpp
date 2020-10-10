@@ -109,6 +109,7 @@ void FreeList(s_expr *pos)
 
 bool CheckBrackets(const std::string str)
 {
+    string.erase(std::remove_if(string.begin(), string.end(), isspace), string.end());
     size_t open = std::count(str.begin(), str.end(), '(');
     size_t closed = std::count(str.begin(), str.end(), ')');
     if (open > closed)
