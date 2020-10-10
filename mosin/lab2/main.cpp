@@ -12,6 +12,7 @@ void OprSeq(const list x);
 list reverse(const list s);
 list rev(const list s, const list z);
 
+
 int main(){
     list s;
     int a;
@@ -19,10 +20,8 @@ int main(){
     cout << "Type 2 for postfix form\n";
     cout << "Command: ";
     cin >> a;
-    if(a != 1 && a != 2){
-        cout << "Error: type 1 or 2\n";
-        return -1;
-    }
+    if(a != 1 && a != 2)
+        error_type(9);
     cout << "Type list: ";
     read_list(s);
     write_list(s);
@@ -31,14 +30,18 @@ int main(){
     if(OprList(s) && isCorrectList(s))
         cout << " True" << endl;
     else
-        cout << " False" << endl;
+        error_type(12);
     destroy(s);
     return 0;
 }
 
 bool isCorrectList(const list x, const int op){
-    if(!isNull(x) && !isAtom(head(x)))
+    static int counter = 1;
+    counter++;
+    if(!isNull(x) && !isAtom(head(x))){
+        counter--;
         return isCorrectList(head(x), 0);
+    }
     else if(!isNull(x) && !isNull(tail(x)) && isOperation(head(x)->node.atom) && !isOperation(head(tail(x))->node.atom))
         return isCorrectList(tail(x), 1);
     else if(!isNull(x) && !isNull(tail(x)) && !isOperation(head(x)->node.atom) && !isOperation(head(tail(x))->node.atom))
@@ -46,6 +49,7 @@ bool isCorrectList(const list x, const int op){
     else if(!isNull(x) && isNull(tail(x)) && op && !isOperation(x->node.atom))
         return true;
     else{
+        cout << counter << " symbol" << endl;
         return false;
     }
 }
@@ -58,8 +62,10 @@ bool isOperation(const base x){
 
 bool OprList(const list x){
     static bool add, sub, mul, div = false;
-    if(isNull(x))
+    if(isNull(x)){
+        error_type(10);
         return false;
+    }
     else if(isAtom(x)){
         if(x->node.atom == '+') add = true;
         else if(x->node.atom == '-') sub = true;
@@ -69,8 +75,10 @@ bool OprList(const list x){
     else
         OprSeq(x);
 
-    if((add && sub && mul) || (add && sub && div) || (add && mul && div) || (sub && mul && div))
+    if((add && sub && mul) || (add && sub && div) || (add && mul && div) || (sub && mul && div)){
+        error_type(11);
         return false;
+    }
     return true;
 }
 
