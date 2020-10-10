@@ -29,4 +29,6 @@ namespace h_list{
     void read_seq(list& y);
     void write_list(const list x);
     void write_seq(const list x);
+    
+    void error_type(int err);
 }
