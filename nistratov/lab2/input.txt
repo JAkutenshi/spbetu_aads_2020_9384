@@ -1,0 +1,5 @@
+(a)
+(a(b)(b)(b(cd)))
+(asd))))))
+(a(b(c(d(e(p))))))
+(aaaaaaa(bb(aaaaaaa))) 

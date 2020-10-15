@@ -1,0 +1,10 @@
+1: Depth of ( (a) ) is  1 
+
+2: Depth of ( (a(b)(b)(b(cd))) ) is  3 
+
+3: Brackets error, check terminal for more information
+
+4: Depth of ( (a(b(c(d(e(p)))))) ) is  6 
+
+5: Depth of ( (aaaaaaa(bb(aaaaaaa))) ) is  3 
+
