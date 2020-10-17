@@ -1,0 +1,9 @@
+A
+(BAA)
+(A)
+(AA)
+(B(BAA)A)
+(BAA)
+(B(BA(BAA))(BAA))
+Помогите
+AAA
