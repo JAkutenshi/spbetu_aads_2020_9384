@@ -84,13 +84,14 @@ bool isFiguredBrackets(std::string expression, int& index)
 int main()
 {
 	int index = 0;
+	bool isExp = false;
 	std::string expression;
 	std::string filePath;
 
-	std::cout << "Enter fileIn path: ";
-	std::cin >> filePath;
+	//std::cout << "Enter fileIn path: ";
+	//std::cin >> filePath;
 
-	std::ifstream fileIn(filePath);
+	std::ifstream fileIn("FileIn.txt");
 
 	if (!fileIn)
 	{
@@ -109,14 +110,22 @@ int main()
 	fileIn.clear();
 	fileIn.seekg(0);
 
-	std::cout << "Enter fileOut Path: ";
-	std::cin >> filePath;
+	//std::cout << "Enter fileOut Path: ";
+	//std::cin >> filePath;
 
-	std::ofstream fileOut(filePath);
+	std::ofstream fileOut("FileOut.txt");
 
 	while (getline(fileIn, expression))
 	{
-		if (isSquareBrackets(expression, index) || isRoundBrackets(expression, index) || isFiguredBrackets(expression, index) || expression.length() == index)
+		if (expression[0] == '+' || expression[0] == '-' || expression[0] == '0')
+			isExp = true;
+		else if (expression[0] == '[')
+			isExp = (isSquareBrackets(expression, index) && expression.length() == index);
+		else if(expression[0] == '(')
+			isExp = (isRoundBrackets(expression, index) && expression.length() == index);
+		else if (expression[0] == '{')
+			isExp = (isFiguredBrackets(expression, index) && expression.length() == index);
+		if (isExp)
 		{
 			fileOut << std::endl << std::setw(offset) << std::left << expression << std::setw(offset) << std::left << "Yes";
 			std::cout << std::endl << std::setw(offset) << std::left << expression << std::setw(offset) << std::left << "Yes";
