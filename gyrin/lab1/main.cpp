@@ -5,20 +5,24 @@
 using namespace std;
 
 bool Check_sin(string sentence, int n) {
-    char signs[20] = {'!','@','#','$','%','^','&','{','}','[',']','=','?','>','<',',','.','"','`','~'};
+  //  char signs[20] = {'!','@','#','$','%','^','&','{','}','[',']','=','?','>','<',',','.','"','`','~'};
     for (int i = 0; i < n - 2;i++) {
         if (isalpha(sentence[i]) && isalpha(sentence[i + 1])) {
             return false;
         }
-        if (isdigit(sentence[i])) {
+        if (!isalpha(sentence[i]) && sentence[i] != '(' && sentence[i] != ')' && sentence[i] !='+' && sentence[i] != '*' && sentence[i] != '-') {
+            return false;
+        }
+    
+    /*    if (isdigit(sentence[i])) {
             return false;
         }
         for (int j = 0; j < 20; j++) {
             if (sentence[i] == signs[j]) {
                 return false;
-            }
-        }
+            }*/
     }
+    return true;
 }
 
 bool Check(string sentence) {
