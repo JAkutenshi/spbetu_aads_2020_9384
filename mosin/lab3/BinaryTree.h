@@ -21,11 +21,13 @@ public:
         delete this;
     }
     
-    void printBinaryTree(){
+    void printBinaryTree(unsigned int depth = 0){
         if(!this->isNullBinaryTree()){
-            std::cout << this->getRootBinaryTree();
-            this->getLeftNode()->printBinaryTree();
-            this->getRirghtNode()->printBinaryTree();
+            this->getLeftNode()->printBinaryTree(depth+1);
+            for(unsigned int i = 0; i<depth; i++)
+                std::cout << "\t";
+            std::cout << this->data << std::endl;
+            this->getRirghtNode()->printBinaryTree(depth+1);
         }
     }
 
