@@ -101,7 +101,7 @@ void printResult(string BT){
     BinaryTree<char> *tree = genNode(BT);
     if(!tree->isNullBinaryTree()){
         tree->printBinaryTree();
-        cout << "Max depth = " << treeDepth(tree) << " Lenght = " << treeLenght(tree) <<endl;
+        cout << "Max depth = " << treeDepth(tree) - 1 << " Lenght = " << treeLenght(tree) <<endl;
     }
     else
         cout << "NULL" << endl;
