@@ -20,9 +20,9 @@ public:
     {
         return this->data;
     }
-    
-    BinaryTree* left;
-    BinaryTree* right;
+
+    BinaryTree* left = nullptr;
+    BinaryTree* right = nullptr;
     T data;
 private:
 };

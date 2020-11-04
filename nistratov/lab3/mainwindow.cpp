@@ -3,6 +3,7 @@
 #include "tree.h"
 #include "maketree.h"
 #include <iostream>
+#include <algorithm>
 #include <string>
 #include <QGraphicsTextItem>
 
@@ -23,18 +24,28 @@ MainWindow::~MainWindow()
 void MainWindow::on_draw_clicked()
 {
     std::string str = qPrintable(ui->input->text());
-    BinaryTree<char> *tr = new BinaryTree<char>();
-    maketree *qt = new maketree();
-    tr = qt->createTree(str);
+    str.erase(std::remove_if(str.begin(), str.end(), isspace), str.end());
+    try {
+        if (ui->checkBox_2->isChecked()){
+            str = createLRC(str);
+            scene->clear();
+        }
+        std::cout << str << std::endl;
+        stringchecker(str);
+            BinaryTree<char> *tr = new BinaryTree<char>();
+            tr = createTree(str);
 
-    if (ui->checkBox->isChecked())
-        qt->calcTree(tr);
+        if (ui->checkBox->isChecked())
+            calcTree(tr);
 
-    scene->clear();
-    treeDrawer(scene, tr, 0, 0, 20);
-    std::string output = "";
-    qt->printTree(tr, output, 0);
-    ui->output->setText(QString::fromStdString(output));
+        scene->clear();
+        treeDrawer(scene, tr, 0, 0, 20);
+        std::string output = "";
+        printTree(tr, output, 0);
+        ui->output->setText(QString::fromStdString(output));
+    }  catch (const char* msg) {
+        std::cerr << msg << std::endl;
+    }
 }
 
 void MainWindow::treeDrawer(QGraphicsScene *&scene, BinaryTree<char> *tr, int w, int h, int depth)
