@@ -1,7 +1,8 @@
 #include <iostream>
 #include <chrono>
 
-void heapify(int array[], size_t n, int i)
+template<typename T>
+void heapify(T array[], size_t n, int i)
 {
     int max = i;
     int left = 2 * i + 1;
@@ -21,7 +22,8 @@ void heapify(int array[], size_t n, int i)
 }
 
 //"Пирамидальная сортировка"
-void sortHeap(int array[], size_t n)
+template<typename T>
+void sortHeap(T array[], size_t n)
 {
     std::cout << "`````````````````" << std::endl; 
     std::cout << "rearraging by max arg: " << std::endl;
@@ -52,7 +54,6 @@ int main()
     int array[N];
     for (int i = 0; i < N; i++)
         std::cin >> array[i];
-
     auto start = std::chrono::high_resolution_clock::now();
     sortHeap(array, N);
     auto stop = std::chrono::high_resolution_clock::now();
