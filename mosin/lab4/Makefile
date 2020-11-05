@@ -1,10 +1,10 @@
 all: goal
-	./prog
+	./a.out
 
 goal: main.o
-	g++ main.o -o prog
+	g++ main.o
 
-main.o: main.cpp BinaryTree.h
+main.o: main.cpp stack.h
 	g++ -c main.cpp
 
 clean:
