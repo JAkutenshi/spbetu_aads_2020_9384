@@ -23,7 +23,7 @@ int main(){
         size_t remainder;
         std::cout << "Type count of array: ";
         std::cin >> count;
-        std::cout << "Type max num in rand arr: ";
+        std::cout << "Type max remainder in rand arr: ";
         std::cin >> remainder;
         array = new int[count];
         for (size_t i = 0; i < count; i++)
