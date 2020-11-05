@@ -47,25 +47,25 @@ public:
     };
 
     // move
-	custom_vector<T>(custom_vector&& other) {
+    custom_vector<T>(custom_vector&& other) {
         vector = other.vector;
-		other.vector = nullptr;
+	other.vector = nullptr;
         current_size = other.size();
         allocated_size = other.allocated_size;
-	}
+    }
 
-	// move
-	custom_vector<T>& operator=(custom_vector<T>&& other) {
-		if (&other == this) return *this;
+    // move
+    custom_vector<T>& operator=(custom_vector<T>&& other) {
+        if (&other == this) return *this;
         if(vector) {
-		    delete []vector;
+            delete []vector;
         }
         vector = other.vector;
-		other.vector = nullptr;
+        other.vector = nullptr;
         current_size = other.size();
         allocated_size = other.allocated_size;
-		return *this;
-	}
+        return *this;
+    }
 
     ~custom_vector() {
         if(this->vector) {
