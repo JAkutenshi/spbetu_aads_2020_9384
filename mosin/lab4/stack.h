@@ -4,8 +4,7 @@
 #include <cstring>
 
 template <typename T>
-class Stack
-{
+class Stack{
 public:
     Stack(){
         this->data = new T[this->memory];
