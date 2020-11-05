@@ -1,34 +1,41 @@
 #include <iostream>
 #include <chrono>
+#include <functional>
 
 template<typename T>
-void heapify(T array[], size_t n, int i)
+bool compar(T a, T b)
+{
+    return a > b;
+}
+
+template<typename T>
+void heapify(T array[], size_t n, int i, std::function<bool(T, T)> comp)
 {
     int max = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
 
-    if ((left < n) && (array[left] > array[max]))
+    if ((left < n) && (comp(array[left], array[max])))
         max = left;
 
-    if ((right < n) && (array[right] > array[max]))
+    if ((right < n) && (comp(array[right],  array[max])))
         max = right;
 
     if (max != i)
     {
         std::swap(array[i], array[max]);
-        heapify(array, n, max);
+        heapify(array, n, max, comp);
     }
 }
 
 //"Пирамидальная сортировка"
 template<typename T>
-void sortHeap(T array[], size_t n)
+void sortHeap(T array[], size_t n, std::function<bool(T, T)> comp)
 {
     std::cout << "`````````````````" << std::endl; 
     std::cout << "rearraging by max arg: " << std::endl;
     for (int i = n / 2 - 1; i >= 0; i--)
-        heapify(array, n, i);
+        heapify(array, n, i, comp);
 
     std::cout << "array: ";
     for (int i = 0; i < n; i++)
@@ -42,7 +49,7 @@ void sortHeap(T array[], size_t n)
                   << " " << array[0] << std::endl;
         std::swap(array[0], array[i]);
         std::cout << "removing last arg: " << array[i] << std::endl;
-        heapify(array, i, 0);
+        heapify(array, i, 0, comp);
     }
     std::cout << "`````````````````" << std::endl << std::endl; 
 }
@@ -54,8 +61,10 @@ int main()
     int array[N];
     for (int i = 0; i < N; i++)
         std::cin >> array[i];
+
+    std::function<bool(int, int)> comp = compar<int>;
     auto start = std::chrono::high_resolution_clock::now();
-    sortHeap(array, N);
+    sortHeap(array, N, comp);
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop-start);
 
