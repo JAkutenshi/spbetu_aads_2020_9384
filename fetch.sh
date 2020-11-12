@@ -5,7 +5,7 @@ git fetch sosedkov-kirill # Соседков
 git fetch Dmitrydavka     # Давыдов
 git fetch kirja1980       # Прашутинский
 git fetch EFFECT322       # Николаев
-#git fetch                # 
+git fetch SimonGyrin      # Гурин
 #git fetch                # 
 #git fetch                # 
 #git fetch                # 

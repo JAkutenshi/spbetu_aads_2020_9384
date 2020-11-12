@@ -5,7 +5,7 @@ git remote add sosedkov-kirill           https://github.com/sosedkov-kirill/spbe
 git remote add Dmitrydavka               https://github.com/Dmitrydavka/spbetu_aads_2020_9384.git            # Давыдов
 git remote add kirja1980                 https://github.com/kirja1980/spbetu_aads_2020_9384.git              # Прашутинский
 git remote add EFFECT322                 https://github.com/EFFECT322/spbetu_aads_2020_9384.git              # Николаев
-#git remote add                           https://github.com//spbetu_aads_2020_9384.git                       # 
+git remote add SimonGyrin                https://github.com/SimonGyrin/spbetu_aads_2020_9384.git             # Гурин
 #git remote add                           https://github.com//spbetu_aads_2020_9384.git                       # 
 #git remote add                           https://github.com//spbetu_aads_2020_9384.git                       # 
 #git remote add                           https://github.com//spbetu_aads_2020_9384.git                       # 
