@@ -1,13 +1,11 @@
 #ifndef BINARYTREE_H
 #define BINARYTREE_H
 
+template <class base>
 class BinaryTree {
 public:
     BinaryTree();
-    BinaryTree* left();
-    BinaryTree* right();
-    char RootBT();
-    //BinaryTree* consBT(char tmp);
+    base RootBT();
     void printBT();
     void change();
     void createBT(std::string& tmp);
@@ -17,7 +15,7 @@ public:
 private:
     BinaryTree* l;
     BinaryTree* r;
-    char data;
+    base data;
 };
 
 #endif

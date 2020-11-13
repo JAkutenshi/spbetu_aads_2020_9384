@@ -5,7 +5,7 @@
 
 int main()
 {
-	BinaryTree bt;
+	BinaryTree<char> bt;
 
 	std::string tmp;
 	std::cout << "Enter BT or FileName.txt: ";

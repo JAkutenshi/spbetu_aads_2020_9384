@@ -1,31 +1,20 @@
 #include <iostream>
+#include <algorithm>
 #include "BinaryTree.h"
 
-BinaryTree::BinaryTree()
+BinaryTree<char>::BinaryTree()
 {
 	this->l = nullptr;
 	this->r = nullptr;
 }
 
-BinaryTree* BinaryTree::left()
-{
-	if (this == nullptr) { std::cerr << "Error: Left(null) \n"; std::exit(1); }
-	return this->l;
-}
-
-BinaryTree* BinaryTree::right()
-{
-	if (this == nullptr) { std::cerr << "Error: Right(null) \n"; std::exit(1); }
-	return this->r;
-}
-
-char BinaryTree::RootBT()
+char BinaryTree<char>::RootBT()
 {
 	if (this == nullptr) { std::cerr << "Error: RootBT(null) \n"; exit(1); }
 	else return data;
 }
 
-void BinaryTree::printBT() {
+void BinaryTree<char>::printBT() {
 	if (!this->IsNull()) {
 		if (!this->l->IsNull() && !this->r->IsNull() && !(this->RootBT() >= 'a' && this->RootBT() <= 'z'))
 			std::cout << '(';
@@ -37,7 +26,7 @@ void BinaryTree::printBT() {
 	}
 }
 
-void BinaryTree::change()
+void BinaryTree<char>::change()
 {
 	if (!this->l->IsNull() && !this->r->IsNull())
 	{
@@ -51,7 +40,7 @@ void BinaryTree::change()
 	}
 }
 
-void BinaryTree::createBT(std::string& tmp)
+void BinaryTree<char>::createBT(std::string& tmp)
 {
 	if (!tmp.empty())
 	{
@@ -82,11 +71,12 @@ void BinaryTree::createBT(std::string& tmp)
 	}
 }
 
-bool BinaryTree::IsNull()
+template<>
+bool BinaryTree<char>::IsNull()
 {
 	return (this == nullptr);
 }
 
-BinaryTree::~BinaryTree()
+BinaryTree<char>::~BinaryTree()
 {
 }
