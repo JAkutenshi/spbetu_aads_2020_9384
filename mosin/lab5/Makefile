@@ -4,7 +4,7 @@ all: goal
 goal: main.o
 	g++ main.o
 
-main.o: main.cpp node.h tree.h
+main.o: main.cpp tree.h
 	g++ -c main.cpp
 
 clean:
