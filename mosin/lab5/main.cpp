@@ -5,42 +5,24 @@
 #include "tree.h"
 
 int main(){
-    std::string temp;
-    std::cout << "Type console to write tree in console or type path to read file\n";
-    std::cin >> temp;
-    if(temp == "console"){
-        Tree<int> tree;
-        int count;
-        std::cout << "Type count: ";
-        std::cin >> count;
-        
+    srand(time(0));
+
+    Tree<int> *tree;
+    
+    int count;
+    std::cout << "Type count: ";
+    std::cin >> count;
+    if(count > 0){
+        int temp;
         std::cout << "Type data: ";
         for(int i = 0; i < count; i++){
             std::cin >> temp;
-            tree.insert_node(std::stoi(temp));
+            tree ? tree = tree->insert(tree, temp) : tree = new Tree<int>(temp);
         }
-        tree.render_node();
-        tree.write_node("output.txt");
+        tree->print();
+        std::ofstream file("output.txt");
+        file.is_open() ? tree->write(file) : throw std::runtime_error("file could not open");
+        delete tree;
     }
-    
-    else{
-        std::ifstream file(temp);
-        if(file.is_open()){
-            while(getline(file, temp)){
-                Tree<int> tree;
-                std::istringstream str(temp);
-                std::string data;
-                while(getline(str, data, ' ')){
-                    tree.insert_node(std::stoi(data));
-                }
-                tree.render_node();
-                tree.write_node("output.txt");
-            }
-        }
-        else{
-            throw std::runtime_error("type valid path\n");
-        }
-    }
-
     return 0;
 }
