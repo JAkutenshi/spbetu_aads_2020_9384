@@ -5,6 +5,7 @@ template <typename T>
 class Tree{
 public:
     Tree(T);
+    ~Tree();
     Tree<T> *insert(Tree<T> *, T);
     void print(int = 0);
     void write(std::ofstream &);
@@ -27,9 +28,22 @@ template <typename T>
 Tree<T>::Tree(T data) : data(data), size(1), left(nullptr), right(nullptr) {}
 
 template <typename T>
+Tree<T>::~Tree(){
+    if(left){
+        delete left;
+    }
+    if(right){
+        delete right;
+    }
+}
+
+template <typename T>
 Tree<T> *Tree<T>::insert(Tree<T> *ptr, T data){
     if (!ptr){
-        return new Tree<T>(data);
+        std::cout << 1 << std::endl;
+        Tree<T>* temp = new Tree<T>(data);
+        std::cout << 2 << std::endl;
+        return temp;
     }
     if (rand() % (ptr->size + 1) == 0){
         std::cout << data << " random\n";
