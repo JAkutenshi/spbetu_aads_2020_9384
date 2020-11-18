@@ -7,7 +7,7 @@
 int main(){
     srand(time(0));
 
-    Tree<int> *tree;
+    Tree<int> *tree = nullptr;
     
     int count;
     std::cout << "Type count: ";
