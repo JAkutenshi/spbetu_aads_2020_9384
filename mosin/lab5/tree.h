@@ -39,23 +39,31 @@ Tree<T>::~Tree(){
 
 template <typename T>
 Tree<T> *Tree<T>::insert(Tree<T> *ptr, T data){
+    static bool print = true;
     if (!ptr){
-        Tree<T>* temp = new Tree<T>(data);
-        return temp;
+        std::cout << "create new node, value: " << data << std::endl;
+        return new Tree<T>(data);
     }
     if (rand() % (ptr->size + 1) == 0){
-        std::cout << data << " random\n";
+        std::cout << "input: " << data << ", action - random with " << (float)1/(ptr->size + 1)*100 << "%" << std::endl;
         return insert_root(ptr, data);
     }
     if (ptr->data > data){
-        std::cout << data << " left\n";
+        std::cout << "input: " << data << ", current value in tree: " << ptr->data << ", action - left" << std::endl;
+        print = true;
         ptr->left = insert(ptr->left, data);
     }
     else{
-        std::cout << data << " right\n";
+        std::cout << "input: " << data << ", current value in tree: " << ptr->data << ", action - right" << std::endl;
+        print = true;
         ptr->right = insert(ptr->right, data);
     }
     update_size(ptr);
+    if(print){
+        std::cout << "tree appearance:" << std::endl;
+        this->print();
+        print = false;
+    }
     return ptr;
 }
 
@@ -87,15 +95,17 @@ void Tree<T>::write(std::ofstream &file){
 template <typename T>
 Tree<T> *Tree<T>::insert_root(Tree<T> *ptr, T data){
     if (!ptr){
-        std::cout << "create\n";
+        std::cout << "create new node, value: " << data << std::endl;
         return new Tree<T>(data);
     }
     if (ptr->data > data){
+        std::cout << "input: " << data << ", current value in tree: " << ptr->data << ", action - left" << std::endl;
         ptr->left = insert_root(ptr->left, data);
         update_size(ptr);
         return rotate_right(ptr);
     }
     else{
+        std::cout << "input: " << data << ", current value in tree: " << ptr->data << ", action - right" << std::endl;
         ptr->right = insert_root(ptr->right, data);
         update_size(ptr);
         return rotate_left(ptr);
@@ -104,22 +114,21 @@ Tree<T> *Tree<T>::insert_root(Tree<T> *ptr, T data){
 
 template <typename T>
 Tree<T> *Tree<T>::rotate_right(Tree<T> *ptr){
-    std::cout << "rotate_right\n";
     Tree<T> *temp = ptr->left;
     if (!temp){
-        std::cout << "exit\n";
         return ptr;
     }
     ptr->left = temp->right;
     temp->right = ptr;
     temp->size = ptr->size;
     update_size(ptr);
+    std::cout << "right rotation:" << std::endl;
+    temp->print();
     return temp;
 }
 
 template <typename T>
 Tree<T> *Tree<T>::rotate_left(Tree<T> *ptr){
-    std::cout << "rotate_left\n";
     Tree<T> *temp = ptr->right;
     if (!temp){
         return ptr;
@@ -128,6 +137,8 @@ Tree<T> *Tree<T>::rotate_left(Tree<T> *ptr){
     temp->left = ptr;
     temp->size = ptr->size;
     update_size(ptr);
+    std::cout << "left rotation:" << std::endl;
+    temp->print();
     return temp;
 }
 
