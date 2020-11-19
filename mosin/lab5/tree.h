@@ -40,9 +40,7 @@ Tree<T>::~Tree(){
 template <typename T>
 Tree<T> *Tree<T>::insert(Tree<T> *ptr, T data){
     if (!ptr){
-        std::cout << 1 << std::endl;
         Tree<T>* temp = new Tree<T>(data);
-        std::cout << 2 << std::endl;
         return temp;
     }
     if (rand() % (ptr->size + 1) == 0){
