@@ -21,11 +21,13 @@ public:
         }
         else if (t->value > val)
         {
+            std::cout << "split: value > new data, go right" << std::endl;
             split(t->Left, left, t->Left, val);
             right = t;
         }
         else
         {
+            std::cout << "split: value < new data, go left" << std::endl;
             split(t->Right, t->Right, right, val);
             left = t;
         }
@@ -42,10 +44,12 @@ public:
             return;
         }
         if (left->R >= right->R){
+            std::cout << "merge: random value of left data >= random value of right data" << std::endl;
             merge(left->Right, left->Right, right);
             t = left;
         }
         else{
+            std::cout << "merge: random value of left data < random value of right data" << std::endl;
             merge(right->Left, left, right->Left);
             t = right;
         }
@@ -57,20 +61,27 @@ public:
             t = v;
         else if (v->R > t->R)
         {
+            std::cout << "insert: Random value of new Data higher" << std::endl;
             split(t, v->Left, v->Right, v->value);
             t = v;
         }
         else if (v->value < t->value)
+        {
+            std::cout << "insert: new data < node data" << std::endl;
             insert(t->Left, v);
+        }
         else
+        {
+            std::cout << "insert: new data > node data" << std::endl;
             insert(t->Right, v);
+        }
     }
 
     void erase (Treap*& t, T key)
     {
         if (!t) return;
         if (t->value == key){
-            std::cout << "Value: " << key << " found!" << std::endl;
+            std::cout << "erase: Value: " << key << " found!" << std::endl;
             merge(t, t->Left, t->Right);
         }
         else if (t->value > key)

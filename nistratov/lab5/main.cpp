@@ -36,6 +36,7 @@ int main()
     auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start);
     std::cout << "Time spend: " << duration.count() << " nanoseconds" << std::endl;
     
+    std::cout << "Tree in LCR: " << std::endl;
     asd.print(asd.root);
     std::cout << std::endl;
 
