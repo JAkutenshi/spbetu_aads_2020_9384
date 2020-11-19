@@ -19,6 +19,7 @@ int main(){
             std::cin >> temp;
             tree ? tree = tree->insert(tree, temp) : tree = new Tree<int>(temp);
         }
+        std::cout << "finished tree:" << std::endl;
         tree->print();
         std::ofstream file("output.txt");
         file.is_open() ? tree->write(file) : throw std::runtime_error("file could not open");
