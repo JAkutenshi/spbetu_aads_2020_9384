@@ -1,8 +1,11 @@
 ﻿#include <iostream>
+#include <fstream>
 #include <vector>
 #include <algorithm>
 #include <iterator> 
 #include <functional>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -59,7 +62,7 @@ T& bingo(T &data, function<bool(typename T::value_type, typename T::value_type)>
                 }
             });
         while (max && equal(data[max], nextValue) && max--){
-            cout << "max-- because items are already sorted" << endl;;
+            cout << "max-- because items are already sorted" << endl;
         }
     }
     return data;
@@ -69,7 +72,33 @@ int main()
 {
     function<bool(int, int)> more = cmp_more<int>;
     function<bool(int, int)> equal = cmp_equal<int>;
-    vector<int> vec{ 8, 9, 1, 6, 11, 4, 3, 14, 1 };
+    vector<int> vec;
+    char c;
+    int n;
+    cout << "Read file? Y/N" << endl;
+    cin >> c;
+    string str;
+    if (c == 'Y') {
+        cout << "file name - ";
+        string name;
+        cin >> name;
+        ifstream file(name);;
+        if (file.is_open()) {
+            while (getline(file, str)) {
+                istringstream temp(str);
+                string num;
+                while (getline(temp, num))
+                    vec.push_back(stod(num));
+            }
+        }
+    }else if(c == 'N'){
+        cout << "input any letter for stop" << endl;
+        while(cin >> n)
+            vec.push_back(n);
+    }else {
+        return 0;
+    }
+    
     print("Before: ", vec);
     bingo(vec, more, equal);
     print("After:  ", vec);
