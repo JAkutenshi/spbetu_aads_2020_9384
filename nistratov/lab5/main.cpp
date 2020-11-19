@@ -21,12 +21,12 @@ int main()
     std::cout << "Inserting data:" << std::endl;
     for (size_t t = 0; t < (sizeof(array)/sizeof(array[0])); t++)
     {
-        std::cout << "Data " << t << ":\nTime spend: ";
+        std::cout << "Data " << t << ":" << std::endl;;
         auto start = std::chrono::high_resolution_clock::now();
         asd.insert(asd.root, new Treap<int>(array[t], rand()));
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start);
-        std::cout << duration.count() << " nanoseconds" << std::endl;
+        std::cout << "Time spend: " << duration.count() << " nanoseconds" << std::endl;
     }
     std::cout << "Find argument and delete it:" << std::endl;
     int c = 0;
@@ -42,7 +42,6 @@ int main()
     
     std::cout << "Tree in LCR: " << std::endl;
     asd.print(asd.root);
-    std::cout << std::endl;
 
     std::ofstream file("output.txt");
     if (!file.is_open())
