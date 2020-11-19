@@ -29,8 +29,12 @@ int main()
         std::cout << duration.count() << " nanoseconds" << std::endl;
     }
     std::cout << "Find argument and delete it:" << std::endl;
+    int c = 0;
+    std::cout << "Argument = ";
+    std::cin >> c;
+    std::cout << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
-    asd.erase(asd.root, 333);
+    asd.erase(asd.root, c);
     //asd.erase(asd.root, 'a');
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start);
