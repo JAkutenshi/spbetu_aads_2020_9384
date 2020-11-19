@@ -11,6 +11,33 @@ public:
     Treap() {};
     Treap(T value, int R) : value(value), R(R), Left(nullptr), Right(nullptr) {};
 
+    void erase(T val)
+    {
+        _erase(root, val);
+    }
+
+    void insert(T val)
+    {
+        _insert(root, new Treap<int>(val, rand()));
+    }
+
+    void print()
+    {
+        _print(root);
+    }
+
+    void write(std::ofstream &file)
+    {
+        _write(root, file);
+    }
+
+private:
+
+    T value;
+    int R;
+
+    Treap *Left, *Right;
+    Treap* root = nullptr;
     void split(Treap* t, Treap *&left, Treap *&right, T& val)
     {
         if (t == nullptr)
@@ -55,7 +82,7 @@ public:
         }
     }
 
-    void insert(Treap*& t, Treap* v)
+        void _insert(Treap*& t, Treap* v)
     {
         if (!t)
             t = v;
@@ -68,16 +95,16 @@ public:
         else if (v->value < t->value)
         {
             std::cout << "insert: new data < node data" << std::endl;
-            insert(t->Left, v);
+            _insert(t->Left, v);
         }
         else
         {
             std::cout << "insert: new data > node data" << std::endl;
-            insert(t->Right, v);
+            _insert(t->Right, v);
         }
     }
 
-    void erase (Treap*& t, T key)
+    void _erase (Treap*& t, T key)
     {
         if (!t) return;
         if (t->value == key){
@@ -85,32 +112,26 @@ public:
             merge(t, t->Left, t->Right);
         }
         else if (t->value > key)
-            erase(t->Left, key);
+            _erase(t->Left, key);
         else
-            erase(t->Right, key);
+            _erase(t->Right, key);
     }
 
-    void print(Treap *&t)
+    void _print(Treap *&t)
     {
         if (!t) return;
-        print(t->Left);
+        _print(t->Left);
         std::cout << t->value <<' ';
-        print(t->Right);
+        _print(t->Right);
     }
 
-    void write(Treap *&t, std::ofstream &file)
+    void _write(Treap *&t, std::ofstream &file)
     {
         if (!t) return;
-        write(t->Left, file);
+        _write(t->Left, file);
         file << t->value << ' ';
-        write(t->Right, file);
+        _write(t->Right, file);
     }
-
-    T value;
-    int R;
-
-    Treap *Left, *Right;
-    Treap *root = nullptr;
 };
 
 #endif // TREAP_H

@@ -23,7 +23,7 @@ int main()
     {
         std::cout << "Data " << t << ":" << std::endl;;
         auto start = std::chrono::high_resolution_clock::now();
-        asd.insert(asd.root, new Treap<int>(array[t], rand()));
+        asd.insert(array[t]);
         auto stop = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start);
         std::cout << "Time spend: " << duration.count() << " nanoseconds" << std::endl;
@@ -34,20 +34,20 @@ int main()
     std::cin >> c;
     std::cout << std::endl;
     auto start = std::chrono::high_resolution_clock::now();
-    asd.erase(asd.root, c);
+    asd.erase(c);
     //asd.erase(asd.root, 'a');
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop-start);
     std::cout << "Time spend: " << duration.count() << " nanoseconds" << std::endl;
     
     std::cout << "Tree in LCR: " << std::endl;
-    asd.print(asd.root);
+    asd.print();
 
     std::ofstream file("output.txt");
     if (!file.is_open())
         std::cout << "File error" << std::endl;
     else
-        asd.write(asd.root, file);
+        asd.write(file);
     file.close();
     return 0;
 }
