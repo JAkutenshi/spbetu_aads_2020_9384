@@ -49,13 +49,13 @@ private:
         else if (t->value > val)
         {
             std::cout << "split: value > new data, go right" << std::endl;
-            split(t->Left, left, t->Left, val);
+            this->split(t->Left, left, t->Left, val);
             right = t;
         }
         else
         {
             std::cout << "split: value < new data, go left" << std::endl;
-            split(t->Right, t->Right, right, val);
+            this->split(t->Right, t->Right, right, val);
             left = t;
         }
     }
@@ -72,12 +72,12 @@ private:
         }
         if (left->R >= right->R){
             std::cout << "merge: random value of left data >= random value of right data" << std::endl;
-            merge(left->Right, left->Right, right);
+            this->merge(left->Right, left->Right, right);
             t = left;
         }
         else{
             std::cout << "merge: random value of left data < random value of right data" << std::endl;
-            merge(right->Left, left, right->Left);
+            this->merge(right->Left, left, right->Left);
             t = right;
         }
     }
@@ -89,18 +89,18 @@ private:
         else if (v->R > t->R)
         {
             std::cout << "insert: Random value of new Data higher" << std::endl;
-            split(t, v->Left, v->Right, v->value);
+            this->split(t, v->Left, v->Right, v->value);
             t = v;
         }
         else if (v->value < t->value)
         {
             std::cout << "insert: new data < node data" << std::endl;
-            _insert(t->Left, v);
+            this->_insert(t->Left, v);
         }
         else
         {
             std::cout << "insert: new data > node data" << std::endl;
-            _insert(t->Right, v);
+            this->_insert(t->Right, v);
         }
     }
 
@@ -109,28 +109,28 @@ private:
         if (!t) return;
         if (t->value == key){
             std::cout << "erase: Value: " << key << " found!" << std::endl;
-            merge(t, t->Left, t->Right);
+            this->merge(t, t->Left, t->Right);
         }
         else if (t->value > key)
-            _erase(t->Left, key);
+            this->_erase(t->Left, key);
         else
-            _erase(t->Right, key);
+            this->_erase(t->Right, key);
     }
 
     void _print(Treap *&t)
     {
         if (!t) return;
-        _print(t->Left);
+        this->_print(t->Left);
         std::cout << t->value <<' ';
-        _print(t->Right);
+        this->_print(t->Right);
     }
 
     void _write(Treap *&t, std::ofstream &file)
     {
         if (!t) return;
-        _write(t->Left, file);
+        this->_write(t->Left, file);
         file << t->value << ' ';
-        _write(t->Right, file);
+        this->_write(t->Right, file);
     }
 };
 
