@@ -1,95 +1,54 @@
 #include <iostream>
-#include <fstream>
 #include <string>
-#include <time.h>
 #include "HashTable.h"
-using namespace std;
+#include <fstream>
 
-HashTable<char> generate(int size){
-    HashTable<char> tmp(size);
-    srand (time(NULL));
-    char characters[] = "abcdefghijklmnopqrstuvwxyz";
+int main(){
+
+    HashTable<string> table;
+    cout<<R"(Enter your elements like this: "hash code" space "information", example: HR4A cat KJ3V dog)"<<endl;
+    table.readElements();
+    cout<<"Your hashTable:"<<endl;
+    table.printElements();
+
+    cout<<"Choose how to enter encoded information:\n1 - from console\n2 - from file"<<endl;
     char c;
-    cout<<"Random characters:"<<endl;
-    for(int i = 0; i<size; i++){
-        c = characters[rand() % 26];
-        cout<<c<<' ';
-        tmp.append(c);
-    }
-    cout<<"\n";
-    return tmp;
-}
-
-
-
-int main() {
-    cout<<"Choose how to create hash table with encoded symbols, there codes - array index:\n1 - create it randomly (from a to z)\n2 - input it manually now"<<endl;
-    char c1;
-    cin>>c1;
-
-    cout<<"Enter size of hash table:"<<endl;
-    int c2;
-    cin>>c2;
+    cin>>c;
     getchar();
-    HashTable<char> table(c2);
-
-    switch(c1){
-        case '1': table = generate(c2); break;
-        case '2':
-            cout<<"Enter your symbols like this a b c..."<<endl;
-            c1 ='\0';
-            while(c1!='\n'){
-                scanf("%c",&c1);
-                if(c1==' ') continue;
-                else if(c1 =='\n') break;
-                else table.append(c1);
+    switch(c){
+        case '1': {
+            cout<<"Enter your information:"<<endl;
+            c = '\0';
+            string search;
+            while (c != '\n') {
+                cin >> search;
+                table.decode(search);
+                c = getchar();
             }
+            cout << '\n';
             break;
-        default: cout<<"You haven't chose anything"<<endl; return 1;
-    }
-    cout<<"Your hash table:"<<endl;
-    table.printHashTable();
-
-    cout<<"Choose how to enter text:\n1 - from file\n2 - from console"<<endl;
-    c1 = '\0';
-    cin>>c1;
-    getchar();
-    c2 = '\0';
-    switch(c1){
-        case '1':{
-            string filePathIn;
-            cout<< "Enter input file:"<<endl;
-            cin>>filePathIn;
+        }
+        case '2': {
+            c = '\0';
+            string filename;
+            string search;
+            cout<<"Enter file name"<<endl;
+            cin>>filename;
             ifstream in;
-            in.open(filePathIn);
+            in.open(filename);
+
             if(!in.is_open()){
                 cerr<<"No such file"<<endl;
                 return 2;
             }
+
             cout<<"Decoded text:"<<endl;
-            while(in>>c2){
-                if(c2 < table.size && c2 >= 0 && table.array[c2] != NULL){
-                    cout<<table.array[c2]<<' ';
-                } else cout<<"NONE ";
+            while(in>>search){
+                table.decode(search);
             }
             cout<<'\n';
             break;
         }
-        case '2':{
-            int size;
-            cout<<"How many elements you will enter?\nP.S. Decoded text will be printed print after your codes"<<endl;
-            cin>>size;
-            c2 = '\0';
-            for(int i = 0;i<size;i++){
-                scanf("%d",&c2);
-                if(c2 < table.size && c2 >= 0 && table.array[c2] != NULL){
-                    cout<<table.array[c2]<<' ';
-                } else cout<<"NONE ";
-            }
-            cout<<'\n';
-            break;
-        }
-        default: cout<<"You haven't chose anything"<<endl; break;
+        default: cout<<"You haven't chose anything"<<endl; return 1;
     }
-    return 0;
 }
