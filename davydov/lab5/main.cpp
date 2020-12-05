@@ -6,7 +6,7 @@
 int main(){
 
     HashTable<string> table;
-    cout<<R"(Enter your elements like this: "hash code" space "information", example: HR4A cat KJ3V dog)"<<endl;
+    cout<<R"(Enter your elements like this: "hash code" space "information", example: 1101 cat 1000 dog)"<<endl;
     table.readElements();
     cout<<"Your hashTable:"<<endl;
     table.printElements();
