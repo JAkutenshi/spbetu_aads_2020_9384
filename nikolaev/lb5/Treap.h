@@ -82,12 +82,18 @@ private:
         }
     }
 
-    void _print(Treap*& t)
+    void _print(Treap*& t, int space = 0, int height = 10)
     {
-        if (t == nullptr) return;
-        this->_print(t->left);
-        std::cout << t->key << ' ';
-        this->_print(t->right);
+        if (t == nullptr)
+            return;
+        space += height;
+        _print(t->left, space);
+        std::cout << std::endl;
+        for (int i = height; i < space; i++)
+            std::cout << ' ';
+        std::cout << t->key << "(" << t->priority << ")\n";
+        std::cout << std::endl;
+        _print(t->right, space);
     }
 
     int _find(Treap*& t, T key)

@@ -6,25 +6,10 @@
 
 int main()
 {
-    srand(time(0));
-    char nums[] = { "ahsdsfugals" };
-    int a = sizeof(nums)/sizeof(char);
-    
-    Treap<char> root;
-    for (char n: nums)
-       root.insert(n);
-    std::cout << "Constructed Treap:";
-    root.print();
-    std::cout << '\n';
-    std::cout << root.find('a');
-    std::cout << '\n';
-    root.insert('a');
-    std::cout << "Constructed Treap:";
-    root.print();
-    std::cout << '\n';
-    std::cout << root.find('a');
 
-    /*srand(time(0));
+
+
+    srand(time(0));
     Treap<int> treap;
     std::cout << "File (0) or Console(1)?\n";
     int tmp;
@@ -107,5 +92,5 @@ int main()
     
     }
     
-    return 0;*/
+    return 0;
 }
