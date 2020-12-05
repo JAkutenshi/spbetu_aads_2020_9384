@@ -18,20 +18,22 @@ int main(){
     switch(c){
         case '1': {
             cout<<"Enter your information:"<<endl;
-            c = '\0';
+            string text;
             string search;
-            while (c != '\n') {
-                cin >> search;
-                table.decode(search);
-                c = getchar();
+            cin>>text;
+            for(int i = 0;i<text.size();i++){
+                search.push_back(text[i]);
+                if(table.check(search)){
+                    table.decode(search);
+                    search = "";
+                }
             }
-            cout << '\n';
             break;
         }
         case '2': {
-            c = '\0';
             string filename;
             string search;
+            string text;
             cout<<"Enter file name"<<endl;
             cin>>filename;
             ifstream in;
@@ -43,10 +45,14 @@ int main(){
             }
 
             cout<<"Decoded text:"<<endl;
-            while(in>>search){
-                table.decode(search);
+            getline(in,text);
+            for(int i = 0;i<text.size();i++){
+                search.push_back(text[i]);
+                if(table.check(search)){
+                    table.decode(search);
+                    search = "";
+                }
             }
-            cout<<'\n';
             break;
         }
         default: cout<<"You haven't chose anything"<<endl; return 1;
