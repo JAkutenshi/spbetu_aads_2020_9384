@@ -89,7 +89,19 @@ public:
             c = getchar();
         }
     }
-
+    
+    bool check(string hash2){
+        int key = HashFunction2(hash2);
+        if(array[key].hash == hash2){return true;}
+        if(!array[key].exist) { return false;}
+        linkedList* tmp2 = &array[key];
+        while(tmp2->next!=nullptr){
+            tmp2 = tmp2->next;
+            if(tmp2->hash==hash2){return true;}
+        }
+        return false;
+    }
+    
     void resize(){
         int pastSize = capacity;
         capacity*=2;
