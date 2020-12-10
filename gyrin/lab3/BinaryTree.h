@@ -52,7 +52,7 @@ public:
 				tmp.erase(0, 3);
 				return;
 			}
-			else if (tmp.front() == '(' && tmp[1]) {
+			else if (tmp.front() == '(' && tmp[1] != ')') {
 				this->root = tmp[1];
 				count += this->level;
 				this->level = count;
