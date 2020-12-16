@@ -6,7 +6,7 @@
 int count = 0;
 
 template <typename P>
-class List{
+class List {
 private:
     void Pop() {
         Node* tmp = Head->Next;
@@ -17,21 +17,16 @@ private:
 
     void Add(P x) {
         Node* temp = new Node;
-        temp->Next = NULL;
+        temp->Prev = 0;
         temp->x = x;
-        count++;
-
-        if (Head != NULL)
-        {
-            temp->Prev = Tail;
-            Tail->Next = temp;
-            Tail = temp;
-        }
-        else
-        {
-            temp->Prev = NULL;
+        temp->Next = Head;
+        if (Head != 0)
+            Head->Prev = temp;
+        if (count == 0)
             Head = Tail = temp;
-        }
+        else
+            Head = temp;
+        count++;
     }
 
     void SortNodes() {
@@ -40,7 +35,7 @@ private:
         Node* temp = new Node;
         while (left->Next) {
             while (right) {
-                if ((left->x->GetFreq()) < (right->x->GetFreq())) {
+                if ((left->x->GetFreq()) > (right->x->GetFreq())) {
                     temp->x = left->x;
                     left->x = right->x;
                     right->x = temp->x;
@@ -63,7 +58,7 @@ public:
         this->Head = NULL;
         this->Tail = NULL;
     };
-    
+
     int GetCount() {
         return count;
     }
