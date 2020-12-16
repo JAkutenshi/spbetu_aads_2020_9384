@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 #include "List.h"
+
+int index_1 = 0;
+std::vector<bool> temp;
+
 template <typename T>
 class Coder {
 public:
@@ -158,9 +162,6 @@ private:
         Sort(prior, amount);
     }
 
-    int index_1 = 0;
-    std::vector<bool> temp;
-
     void WriteCodedValue(Coder<char>* Tree, CodedValue code[]) {
         if (Tree->GetZero() != NULL) {
             temp.push_back(0);
@@ -174,6 +175,8 @@ private:
             code[index_1].letter = Tree->GetRoot();
             code[index_1].code = temp;
             index_1++;
+        }
+        if (!temp.empty()) {
             temp.pop_back();
         }
     }
