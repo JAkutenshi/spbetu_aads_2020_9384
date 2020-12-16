@@ -40,7 +40,7 @@ private:
         Node* temp = new Node;
         while (left->Next) {
             while (right) {
-                if ((left->x->GetFreq()) > (right->x->GetFreq())) {
+                if ((left->x->GetFreq()) < (right->x->GetFreq())) {
                     temp->x = left->x;
                     left->x = right->x;
                     right->x = temp->x;
