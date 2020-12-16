@@ -96,13 +96,12 @@ int main()
         std::cout << "Error: file input.txt isn't open" << std::endl;
         exit(1);
     }
-    getline(file, temp);
-    if (temp.empty()) {
-        std::cout << "Error: empty array";
-        exit(2);
-    }
     while (file >> value) {
         tmp.push_back(value);
+    }
+    if (tmp.empty()) {
+        std::cout << "Error: emptyfile" << std::endl;
+        exit(2);
     }
     file.close();
     int count = tmp.size();
