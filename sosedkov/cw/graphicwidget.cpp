@@ -15,31 +15,19 @@ GraphicWidget::GraphicWidget(QWidget *parent) : QWidget(parent) {
     view = new QGraphicsView(parent);
     view->resize(parent->width(), parent->height());
     view->setScene(scene);
-    view->setAlignment(Qt::AlignTop);
+//    view->setAlignment(Qt::AlignTop);
     scene->setSceneRect(view->contentsRect());
 
-    gen_button = new QPushButton("Generate", parent);
-    gen_button->setGeometry(400,700, 100,30);
-    gen_input = new QLineEdit(parent);
-    gen_input->setPlaceholderText("Data size (300 by deafult)");
-    gen_input->setGeometry(0,700, 400,30);
 
-    connect(gen_button, &QPushButton::clicked,  [=]() {
-        QString str = gen_input->text();
-        bool ok;
-        int dec = str.toInt(&ok, 10);
-        if(ok && dec > 0) {
-            scene->clear();
-            drawStatistics(dec);
-        }
-    });
 }
 
-
+void GraphicWidget::clear() {
+    scene->clear();
+}
 
 void GraphicWidget::drawStatistics(int data_size) {
-    int insert_width = 300;
-    int insert_height = 200;
+    int insert_width = 420;
+    int insert_height = 240;
     int x_max = data_size;
     int y_max = 200;
     int random_insertion_time;
@@ -83,7 +71,7 @@ void GraphicWidget::drawStatistics(int data_size) {
 
     qDebug() << "Random insert time (ms) " << t.elapsed();
     random_insertion_time = t.elapsed();
-
+    p.end();
 
 
 
@@ -108,7 +96,7 @@ void GraphicWidget::drawStatistics(int data_size) {
 
     qDebug() << "Random remove time (ms) " << t.elapsed();
     random_remove_time = t.elapsed();
-
+    random_remove_p.end();
 
 
 
@@ -141,7 +129,7 @@ void GraphicWidget::drawStatistics(int data_size) {
     }
     qDebug() << "Sorted insert time (ms) " << t.elapsed();
     sorted_insertion_time = t.elapsed();
-
+    p2.end();
 
 
 
@@ -167,6 +155,7 @@ void GraphicWidget::drawStatistics(int data_size) {
 
     qDebug() << "Sorted remove time (ms) " << t.elapsed();
     sorted_remove_time = t.elapsed();
+    sorted_remove_p.end();
 
 
 
@@ -175,8 +164,10 @@ void GraphicWidget::drawStatistics(int data_size) {
 
 
 
-
-
+    insert_operations_pixmap = drawLog(insert_operations_pixmap, insert_width,insert_height, x_max, y_max, 17);
+    remove_operations_pixmap = drawLog(remove_operations_pixmap, insert_width,insert_height, x_max, y_max, 14);
+    insert_operations_sorted_pixmap = drawLog(insert_operations_sorted_pixmap, insert_width,insert_height, x_max, y_max, 17);
+    remove_operations_sorted_pixmap = drawLog(remove_operations_sorted_pixmap, insert_width,insert_height, x_max, y_max, 12);
 
     scene->addPixmap(insert_operations_pixmap)->setPos(10,60);
     scene->addPixmap(remove_operations_pixmap)->setPos(10,insert_height+190);
@@ -196,13 +187,13 @@ void GraphicWidget::drawStatistics(int data_size) {
 
     //INSERT TEXT
     QFont titleFont;
-    titleFont.setPixelSize(20);
+    titleFont.setPixelSize(25);
     titleFont.setBold(true);
     titleFont.setFamily("Calibri");
 
 
     QFont textFont;
-    textFont.setPixelSize(10);
+    textFont.setPixelSize(12);
     textFont.setBold(false);
     textFont.setFamily("Calibri");
 
@@ -351,24 +342,64 @@ void GraphicWidget::drawStatistics(int data_size) {
     text->setPos(insert_width+50+80+10, 2*insert_height+170+30+20);
     text->setFont(textFont);
 
+
+
+
+    QFont axisTitleFont;
+    axisTitleFont.setPixelSize(10);
+    axisTitleFont.setBold(true);
+    axisTitleFont.setFamily("Calibri");
+    //1
+    text = scene->addText(QString("y = number of operations"));
+    text->setPos(10,60-5); //y-5
+    text->setFont(axisTitleFont);
+
+    text = scene->addText(QString("x = data size"));
+    text->setPos(10+insert_width-80, 60-19+insert_height); //x+wid-80; y-19+height
+    text->setFont(axisTitleFont);
+
+    //2
+    text = scene->addText(QString("y = number of operations"));
+    text->setPos(10,insert_height+190-5);
+    text->setFont(axisTitleFont);
+
+    text = scene->addText(QString("x = data size"));
+    text->setPos(10+insert_width-80,insert_height+190-19+insert_height);
+    text->setFont(axisTitleFont);
+
+    //3
+    text = scene->addText(QString("y = number of operations"));
+    text->setPos(50+insert_width,60-5);
+    text->setFont(axisTitleFont);
+
+    text = scene->addText(QString("x = data size"));
+    text->setPos(50+insert_width+insert_width-80,60-19+insert_height);
+    text->setFont(axisTitleFont);
+
+    //4
+    text = scene->addText(QString("y = number of operations"));
+    text->setPos(50+insert_width,insert_height+190-5);
+    text->setFont(axisTitleFont);
+
+    text = scene->addText(QString("x = data size"));
+    text->setPos(50+insert_width+insert_width-80,insert_height+190-19+insert_height);
+    text->setFont(axisTitleFont);
 }
 
-QPixmap GraphicWidget::createPixmapGraph(int width, int height, double x_max_value, double y_max_value, double log_coeff) {
-    QPixmap graph(width, height);
+
+
+QPixmap GraphicWidget::drawLog(QPixmap graph,int width, int height, double x_max_value, double y_max_value, double log_coeff) {
+//    QPixmap graph(width, height);
     QPainter p(&graph);
-    graph.fill(QColor(0,255,255));
     p.setRenderHint(QPainter::Antialiasing,true);
-    p.setPen(QColor(0,255,255));
-
-
 
     QPen pen(QColor(0,0,0));
-    pen.setWidth(2);
+    pen.setWidth(4);
     p.setPen(pen);
     p.drawLine(0, 0, 0, height-1);
     p.drawLine(0, height-1, width-1, height-1);
 
-    pen.setColor(QColor(0,0,255));
+    pen.setColor(QColor(40,77,255));
     pen.setWidth(3);
     p.setPen(pen);
     for(double i=0; i<x_max_value; i+=1) {
@@ -376,6 +407,22 @@ QPixmap GraphicWidget::createPixmapGraph(int width, int height, double x_max_val
         double y = log_coeff*log(x);
         p.drawPoint(x*width/(x_max_value), (-y*height/y_max_value)+height);
     }
+    return graph;
+}
+
+
+
+
+
+QPixmap GraphicWidget::createPixmapGraph(int width, int height, double x_max_value, double y_max_value, double log_coeff) {
+    QPixmap graph(width, height);
+    QPainter p(&graph);
+    graph.fill(QColor(192,192,192));
+    p.setRenderHint(QPainter::Antialiasing,true);
+
+
+
+
     return graph;
 }
 

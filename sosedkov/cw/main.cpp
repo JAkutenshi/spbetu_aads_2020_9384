@@ -7,33 +7,33 @@
 #include "graphicwidget.h"
 #include <QRandomGenerator>
 #include <QVector>
+#include <QPushButton>
+#include <QLineEdit>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-//    TreeViewWidget* treeView = new TreeViewWidget(&w);
-//    AVL_Tree<int> tree;
-
-//    tree.insert(1);
-//    tree.insert(2);
-//    tree.insert(3);
-//    tree.insert(4);
-//    tree.insert(5);
-//    tree.insert(6);
-//    tree.insert(7);
-//    tree.remove(4);
-//    tree.remove(5);
-//       tree.remove(1);
-//    for(int i=0; i<data.size(); i++) {
-//        tree.insert(data[i]);
-//    }
-//    qDebug() << "operations" << data.size() << tree.number_of_operations();
-//    treeView->drawTree(tree.getRoot(), tree.height());
+//    GraphicWidget* g = new GraphicWidget(&w);
 
 
-    GraphicWidget* g = new GraphicWidget(&w);
-    g->drawStatistics();
+//    QPushButton* gen_button = new QPushButton("Generate", &w);
+//    gen_button->setGeometry(400,740, 100,30);
+//    QLineEdit* gen_input = new QLineEdit(&w);
+//    gen_input->setPlaceholderText("Data size (300 by deafult)");
+//    gen_input->setGeometry(0,740, 400,30);
+
+//    connect(gen_button, &QPushButton::clicked,  [=]() {
+//        QString str = gen_input->text();
+//        bool ok;
+//        int dec = str.toInt(&ok, 10);
+//        if(ok && dec > 0) {
+//            g->clear();
+//            g->drawStatistics(dec);
+//        }
+//    });
+
+
     w.show();
     return a.exec();
 }

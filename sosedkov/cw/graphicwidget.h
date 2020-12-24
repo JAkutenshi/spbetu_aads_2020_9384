@@ -16,8 +16,10 @@ class GraphicWidget : public QWidget
 public:
     explicit GraphicWidget(QWidget *parent = nullptr);
     void drawStatistics(int data_size=300);
+    void clear();
 private:
     QPixmap createPixmapGraph(int, int, double, double, double);
+    QPixmap drawLog(QPixmap,int,int,double,double,double);
     QGraphicsScene* scene;
     QGraphicsView* view;
     QPushButton* gen_button;
