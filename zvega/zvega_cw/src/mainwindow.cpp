@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <math.h>
 
 
 
@@ -20,40 +21,41 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_startButtom_clicked()
 {
-    sceneTask = new QGraphicsScene(0,0,ui->Task->width()*1.5,100*20);
+    sceneTask = new QGraphicsScene(0,0,ui->Task->width(),100*20);
+    sceneCode = new QGraphicsScene(0,0,ui->code->width()*2,ui->code->height());
     ui->Task->setScene(sceneTask);
+    ui->code->setScene(sceneCode);
+    taskTable.clear();
+    taskCode.clear();
+    taskText.clear();
 
     taskText = ui->lineEdit->text().replace(" ","");
     if(taskText.length() <= 0)
         return;
     Tree = haffman(taskText.toStdString().c_str());
-    file.open("control.txt",ios_base::app);
-    file << "Start string:" << endl;
-    file << taskText.toStdString() << endl;
-    file << "Table:" << endl;
+    file.open("control.txt",ios_base::ate);
     taskCode = encode(Tree, taskText.toStdString().c_str());
-    file << "Code:" << endl;
-    file << taskCode.toStdString() << endl;
-    ui->textTask->setText(taskCode);
-    file << endl <<"Chose one task from group and save answer. \n№1 binary code, №2 tree(or table) from program, №3 start string\n\n" << endl;
-    //file << decode(Tree, code) << endl;
+    sceneCode->addText(taskCode,QFont(taskCode.toStdString().c_str(),20));
     taskText = ui->lineEdit->text().replace(" ","");
     printTree(Tree, 0);
     printTask();
     file << "--------------------------------------->\n";
     file.close();
+    scene->setBackgroundBrush(Qt::white);
+    scene->clearSelection();
+    scene->setSceneRect(scene->itemsBoundingRect());
 }
 
 void MainWindow::printTask(){
-    file << endl;
-    file << "№1 Encode sentence:" << endl;
-    file << this->taskText.toStdString().c_str() << endl;
-    file << taskTable.toStdString() << endl;
-    file << "№2 Print tree:" << endl;
-    file << taskText.toStdString() << "\n\n";
-    file << "№3 Decode sentence:" << endl;
-    file << taskCode.toStdString() << endl;
-    file << taskTable.toStdString() << endl;
+    file << taskText.toStdString() << endl;
+    file << "1.1. Для заданного текста определить число вхождений каждого символа." << endl;
+    file << "Ответ: \n" << taskNumL.toStdString() << endl;
+    file << "1.2. Построить упорядоченное дерево Хаффмена, имеющее минимальную высоту из всех деревьев Хаффмена.\n Надписать узлы дерева (символ(ы), число вхождений)." << endl;
+    file << "Ответ: \n" << "Дерево из программы в файле tree.png" << "\n\n";
+    file << "1.3. Выписать код Хаффмена для всех символов, входящих в текст." << endl;
+    file << "Ответ: \n" << taskTable.toStdString() << endl;
+    file << "1.4. Подсчитать длину закодированного полученным кодом текста." << endl;
+    file << "Ответ: \n" << taskCode.toStdString().length() << endl;
 }
 
 CodeTree* MainWindow::haffman(const Symbol* symbols, int len)
@@ -134,13 +136,11 @@ char* MainWindow::encode(const CodeTree* tree, const char* message){
         while (j > 0) {
             code[index++] = path[--j];
             if (-1 == check.find(symbols_map[message[i] - CHAR_MIN]->s.c)){
-                file << path[j];
                 taskTable += path[j];
             }
         }
         if (-1 == check.find(symbols_map[message[i] - CHAR_MIN]->s.c)) {
             check.push_back(symbols_map[message[i] - CHAR_MIN]->s.c);
-            file << " - " << symbols_map[message[i] - CHAR_MIN]->s.c << std::endl;
             taskTable += " - ";
             taskTable += symbols_map[message[i] - CHAR_MIN]->s.c;
             taskTable += "\n";
@@ -154,37 +154,116 @@ char* MainWindow::encode(const CodeTree* tree, const char* message){
 }
 
 void MainWindow::printTree(CodeTree* Tree, int index){
-    int x = 300*10;
+    int x = 300*15;
     if(Tree){
         if(index == 0){
-            scene = new QGraphicsScene(0,0,300*10,100*10);
+            scene = new QGraphicsScene(0,0,x,100*10);
             ui->graphicsView->setScene(scene);
             printTreeL(Tree->left, index+1, x/2);
             printTreeR(Tree->right, index+1, x/2);
             scene->addEllipse(x/2,50*(index+1),25,25,QColor(0,0,0),QColor(255,150,255));
-            scene->addText(QString(Tree->s.c))->setPos(x/2+5,50*(index+1));
+            scene->addText(QString().setNum(Tree->s.weight))->setPos(x/2+5,50*(index+1));
+            scene->addText(QString("0"))->setPos(x/2+5-25,50*(index+1)-20);
+            scene->addText(QString("1"))->setPos(x/2+5+25,50*(index+1)-20);
         }
     }
 }
 
 void MainWindow::printTreeL(CodeTree* Tree, int index, int offset){
     if(Tree){
-        int x = offset - (15-index)*25/index;
+        int x = offset - 4*pow(2,8-index);
         scene->addLine(x + 12.5,50*(index+1)+12.5,offset+12.5,50*index +12.5,QPen(Qt::black,3));
         printTreeL(Tree->left, index+1, x);
         printTreeR(Tree->right, index+1, x);
         scene->addEllipse(x,50*(index+1),25,25,QColor(0,0,0),QColor(255,150,255));
-        scene->addText(QString(Tree->s.c))->setPos(x+5,50*(index+1));
+        if(Tree->left || Tree->right){
+            scene->addText(QString().setNum(Tree->s.weight))->setPos(x+5,50*(index+1));
+            scene->addText(QString("0"))->setPos(x+5-25,50*(index+1)-20);
+            scene->addText(QString("1"))->setPos(x+5+25,50*(index+1)-20);
+        }
+        else{
+            scene->addText(QString(Tree->s.c))->setPos(x+5,50*(index+1));
+            scene->addText(QString().setNum(Tree->s.weight))->setPos(x+5,50*(index+1)-25);
+            taskNumL += QString(Tree->s.c) + " - " + QString().setNum(Tree->s.weight) + "\n";
+        }
     }
 }
 
 void MainWindow::printTreeR(CodeTree* Tree, int index, int offset){
     if(Tree){
-        int x = offset + (15-index)*25/index;
+        int x = offset + 4*pow(2,8-index);
         scene->addLine(x + 12.5,50*(index+1)+12.5,offset+12.5,50*index +12.5,QPen(Qt::black,3));
         printTreeL(Tree->left, index+1, x);
         printTreeR(Tree->right, index+1, x);
         scene->addEllipse(x,50*(index+1),25,25,QColor(0,0,0),QColor(255,150,255));
-        scene->addText(QString(Tree->s.c))->setPos(x+5,50*(index+1));
+        if(Tree->left || Tree->right){
+            scene->addText(QString("0"))->setPos(x+5-25,50*(index+1)-20);
+            scene->addText(QString("1"))->setPos(x+5+25,50*(index+1)-20);
+            scene->addText(QString().setNum(Tree->s.weight))->setPos(x+5,50*(index+1));
+        }
+        else{
+            scene->addText(QString(Tree->s.c))->setPos(x+5,50*(index+1));
+            scene->addText(QString().setNum(Tree->s.weight))->setPos(x+5,50*(index+1)-25);
+            taskNumL += QString(Tree->s.c) + " - " + QString().setNum(Tree->s.weight) + "\n";
+
+        }
     }
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event){
+    if(event){
+        int h = ui->centralwidget->height();
+        int w = ui->centralwidget->width();
+        ui->layout->setGeometry(QRect(0,0,w,h));
+    }
+}
+
+void MainWindow::on_info_clicked()
+{
+    QMessageBox::information(this, "Info", "Поддерживается только английский.\n"
+                                               "Напишите строку и нажмите ок для построения дерева.\n"
+                                               "В узле если это не лист показывается вес узла.\n"
+                                               "В листе показывается символ узла, а над ним его вес(число вхождений символа).\n"
+                                               "Если узел не лист показывается слева и справа '0' или '1'.\n"
+                                               "Задания для контроля в файле 'control.txt'.");
+}
+
+void MainWindow::on_save_clicked()
+{
+
+    QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
+    image.fill(Qt::transparent);
+
+    QPainter painter(&image);
+    scene->render(&painter);
+    image.save("tree.png");
+}
+
+void MainWindow::on_random_clicked()
+{
+    sceneTask = new QGraphicsScene(0,0,ui->Task->width(),100*20);
+    sceneCode = new QGraphicsScene(0,0,ui->code->width()*2,ui->code->height());
+    ui->Task->setScene(sceneTask);
+    ui->code->setScene(sceneCode);
+    taskTable.clear();
+    taskCode.clear();
+    taskText.clear();
+
+    for(int i = 0; i < 30; i++)
+            taskText.append(char('a' + rand() % ('z' - 'a')));
+    ui->lineEdit->setText(taskText);
+    if(taskText.length() <= 0)
+        return;
+    Tree = haffman(taskText.toStdString().c_str());
+    file.open("control.txt",ios_base::ate);
+    taskCode = encode(Tree, taskText.toStdString().c_str());
+    sceneCode->addText(taskCode,QFont(taskCode.toStdString().c_str(),20));
+    taskText = ui->lineEdit->text().replace(" ","");
+    printTree(Tree, 0);
+    printTask();
+    file << "--------------------------------------->\n";
+    file.close();
+    scene->setBackgroundBrush(Qt::white);
+    scene->clearSelection();
+    scene->setSceneRect(scene->itemsBoundingRect());
 }

@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QColor>
 #include <QString>
+#include <QMessageBox>
 #include "priority_queue.h"
 #include "code_tree.h"
 #include <functional>
@@ -16,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <QPainter>
 
 using namespace std;
 
@@ -35,6 +37,7 @@ public:
     QString taskText;
     QString taskTable;
     QString taskCode;
+    QString taskNumL;
     ofstream file;
     void printLine(CodeTree *, int);
     void printLineL(CodeTree *, int, int);
@@ -43,6 +46,7 @@ public:
     void printTreeL(CodeTree *, int, int);
     void printTreeR(CodeTree *, int, int);
     void printTask();
+    void resizeEvent(QResizeEvent *event);
 
     CodeTree* haffman(const Symbol* symbols, int len);
     CodeTree* haffman(const char* message);
@@ -54,8 +58,15 @@ public:
 
     QGraphicsScene *scene;
     QGraphicsScene *sceneTask;
+    QGraphicsScene *sceneCode;
 private slots:
     void on_startButtom_clicked();
+
+    void on_info_clicked();
+
+    void on_save_clicked();
+
+    void on_random_clicked();
 
 private:
     Ui::MainWindow *ui;
