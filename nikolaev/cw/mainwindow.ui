@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGraphicsView" name="graphicsView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>192</height>
+         </size>
+        </property>
+        <property name="dragMode">
+         <enum>QGraphicsView::ScrollHandDrag</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTextBrowser" name="textBrowser">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="pushButton_2">
+        <property name="text">
+         <string>Clear</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>Next</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuTreapDemonstratio">
+    <property name="title">
+     <string>Project</string>
+    </property>
+    <widget class="QMenu" name="menuSave_as">
+     <property name="title">
+      <string>Save as</string>
+     </property>
+     <widget class="QMenu" name="menuText">
+      <property name="title">
+       <string>Text</string>
+      </property>
+      <addaction name="actionPreorder"/>
+      <addaction name="actionInorder"/>
+      <addaction name="actionPostorder"/>
+     </widget>
+     <addaction name="actionImage"/>
+     <addaction name="menuText"/>
+    </widget>
+    <addaction name="separator"/>
+    <addaction name="Open"/>
+    <addaction name="Enter"/>
+    <addaction name="actionGanerate"/>
+    <addaction name="separator"/>
+    <addaction name="menuSave_as"/>
+   </widget>
+   <widget class="QMenu" name="menuTreap">
+    <property name="title">
+     <string>Editing</string>
+    </property>
+    <addaction name="actionEnter_Key"/>
+    <addaction name="actionErase_Key"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionStep_by_step_analysis"/>
+   </widget>
+   <addaction name="menuTreapDemonstratio"/>
+   <addaction name="menuTreap"/>
+   <addaction name="menuTools"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="Open">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="Enter">
+   <property name="text">
+    <string>Enter</string>
+   </property>
+  </action>
+  <action name="actionEnter_Key">
+   <property name="text">
+    <string>Enter Key</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionErase_Key">
+   <property name="text">
+    <string>Erase Key</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionGanerate">
+   <property name="text">
+    <string>Ganerate</string>
+   </property>
+  </action>
+  <action name="actionImage">
+   <property name="text">
+    <string>Image</string>
+   </property>
+  </action>
+  <action name="actionPreorder">
+   <property name="text">
+    <string>Preorder </string>
+   </property>
+  </action>
+  <action name="actionInorder">
+   <property name="text">
+    <string>Inorder </string>
+   </property>
+  </action>
+  <action name="actionPostorder">
+   <property name="text">
+    <string>Postorder </string>
+   </property>
+  </action>
+  <action name="actionStep_by_step_analysis">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Step by step analysis</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
