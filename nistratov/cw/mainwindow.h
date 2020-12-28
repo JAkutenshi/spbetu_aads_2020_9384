@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
-#include <chrono>
 #include "treap.h"
 #include <QTextStream>
 #include <QElapsedTimer>
@@ -12,6 +11,8 @@
 #include <QFileDialog>
 #include <string>
 #include <sstream>
+#include "startmenu.h"
+#include "input.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,19 +26,13 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void start();
-
-    template<typename T>
-    void generate(T* array, size_t s, std::string info, bool prior);
-
 public slots:
-    void on_worst_clicked();
-    void on_random_clicked();
-    void on_file_clicked();
-    void on_create_clicked();
+    void on_change_clicked();
+    void on_inputarray_clicked();
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene* scene;
+    StartMenu* sWindow;
+    input* inWindow;
 };
 #endif // MAINWINDOW_H

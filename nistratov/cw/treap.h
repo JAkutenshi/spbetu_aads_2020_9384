@@ -3,9 +3,11 @@
 
 #include <iostream>
 #include <fstream>
+#include <QPainter>
 #include <QGraphicsScene>
 #include <QGraphicsTextItem>
 #include <QPen>
+#include <math.h>
 
 template <typename T>
 class Treap
@@ -34,9 +36,11 @@ public:
         _write(root, file);
     }
 
-    void drawTree(QGraphicsScene *scene, int w, int h, int depth)
+    void drawTree(QGraphicsScene *scene, int size)
     {
-        _drawTree(scene, root, w, h, depth);
+        sz = 2*std::log2(size);
+        std::cout << sz << std::endl;
+        draw(scene, root, 0);
     }
 
     void info_expand(std::string &str)
@@ -50,6 +54,7 @@ private:
 
     Treap *Left, *Right;
     Treap* root = nullptr;
+    int sz;
     void split(Treap* t, Treap *&left, Treap *&right, T& val)
     {
         if (t == nullptr)
@@ -127,40 +132,45 @@ private:
         _print(t->Right, streamOut);
     }
 
-    void _drawTree(QGraphicsScene *&scene, Treap<T> *tr, float w, float h, float depth)
+    void draw(QGraphicsScene *scene, Treap<T> *tr, int index)
     {
-        QPen pen;
-        if (tr == nullptr)
-        {
-            scene->addEllipse(w, h, 40, 40, pen, QBrush(Qt::red));
-            QGraphicsTextItem *null = new QGraphicsTextItem;
-            null->setPos(w, h+5);
-            null->setPlainText(" NULL");
-            scene->addItem(null);
-            return ;
+        int x = 800;
+        if (tr){
+            if(index == 0){
+                drawL(scene, tr->Left, index+1, x/2);
+                drawR(scene, tr->Right, index+1, x/2);
+                scene->addEllipse(x/2,50*(index+1),40,40,QColor(0,0,0),QColor(255,150,255));
+                scene->addText(QString().setNum(tr->value))->setPos(x/2+2,50*(index+1));
+                scene->addText(QString().setNum(tr->R))->setPos(x/2+2,50*(index+1)+10);
+            }
         }
-        QString text, textRand;
-        text = QString::fromStdString(std::to_string(tr->value));
-        textRand = QString::fromStdString(std::to_string(tr->R));
-        QGraphicsTextItem *let = new QGraphicsTextItem;
-        QGraphicsTextItem *letRand = new QGraphicsTextItem;
-        let->setPos(w, h+3);
-        let->setPlainText(text);
-        letRand->setPos(w, h+13);
-        letRand->setPlainText(textRand);
-        //if (tr->Left != nullptr)
-        pen.setBrush(Qt::red);
-            scene->addLine(w+15/2, h+15, w-(depth/2)*15, h+70+15, pen);
-       // if (tr->Right != nullptr)
-                    pen.setBrush(Qt::blue);
-            scene->addLine(w+15/2, h+15, w+(depth/2)*15, h+70+15, pen);
-        scene->addEllipse(w, h, 40, 40, pen, QBrush(Qt::blue));
-        scene->addItem(let);
-        scene->addItem(letRand);
-        _drawTree(scene, tr->Left, w-(depth/2)*15, h+70, depth/2);
-        _drawTree(scene, tr->Right, w+(depth/2)*15, h+70, depth/2);
     }
 
+    void drawL(QGraphicsScene *scene, Treap<T> *tr, int index, int offset)
+    {
+        if (tr){
+            int x = offset - 8*pow(2,sz-index);
+            scene->addLine(x + 12.5,50*(index+1)+12.5,offset+12.5,50*index +12.5,QPen(Qt::black,3));
+            drawL(scene, tr->Left, index+1, x);
+            drawR(scene, tr->Right, index+1, x);
+            scene->addEllipse(x,50*(index+1),40,40,QColor(0,0,0),QColor(255,150,255));
+            scene->addText(QString().setNum(tr->value))->setPos(x+2,50*(index+1));
+            scene->addText(QString().setNum(tr->R))->setPos(x+2,50*(index+1)+10);
+        }
+    }
+
+    void drawR(QGraphicsScene *scene, Treap<T> *tr, int index, int offset)
+    {
+        if (tr){
+            int x = offset + 8*pow(2,sz-index);
+            scene->addLine(x + 12.5,50*(index+1)+12.5,offset+12.5,50*index +12.5,QPen(Qt::black,3));
+            drawL(scene, tr->Left, index+1, x);
+            drawR(scene, tr->Right, index+1, x);
+            scene->addEllipse(x,50*(index+1),40,40,QColor(0,0,0),QColor(255,150,255));
+            scene->addText(QString().setNum(tr->value))->setPos(x+2,50*(index+1));
+            scene->addText(QString().setNum(tr->R))->setPos(x+2,50*(index+1)+10);
+        }
+    }
     void _info_expand(Treap *t, std::string &str)
     {
         if (t == nullptr){
