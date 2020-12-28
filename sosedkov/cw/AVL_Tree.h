@@ -78,10 +78,7 @@ public:
 
     void insert(T data) {
         num_operations = 0;
-        QTime t;
-        t.start();
         root = insert(data, root);
-        m_seconds = t.elapsed();
 
     }
 
