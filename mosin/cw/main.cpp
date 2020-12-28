@@ -97,5 +97,8 @@ int main(int argc, char *argv[]){
     QObject::connect(axisYZ, &QRadioButton::toggled,
                      modifier, &SurfaceGraph::enable_axisYZ);
 
+    uniform_distribution->setChecked(true);
+    axisXY->setChecked(true);
+
     return a.exec();
 }
