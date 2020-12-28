@@ -55,7 +55,28 @@ int main(int argc, char *argv[]){
     modelVBox->addWidget(generate);
     modelGroupBox->setLayout(modelVBox);
 
+    QGroupBox *axisGroupBox = new QGroupBox(QStringLiteral("Axis"));
+
+    QRadioButton *axisXY = new QRadioButton(widget);
+    axisXY->setText(QStringLiteral("axisXY"));
+    axisXY->setChecked(false);
+
+    QRadioButton *axisXZ = new QRadioButton(widget);
+    axisXZ->setText(QStringLiteral("axisXZ"));
+    axisXZ->setChecked(false);
+
+    QRadioButton *axisYZ = new QRadioButton(widget);
+    axisYZ->setText(QStringLiteral("axisYZ"));
+    axisYZ->setChecked(false);
+
+    QVBoxLayout *axisVBox = new QVBoxLayout;
+    axisVBox->addWidget(axisXY);
+    axisVBox->addWidget(axisXZ);
+    axisVBox->addWidget(axisYZ);
+    axisGroupBox->setLayout(axisVBox);
+
     vLayout->addWidget(modelGroupBox);
+    vLayout->addWidget(axisGroupBox);
 
     widget->show();
 
@@ -69,6 +90,12 @@ int main(int argc, char *argv[]){
                      modifier, &SurfaceGraph::enable_unbalanced_distribution);
     QObject::connect(generate, &QPushButton::pressed,
                      modifier, &SurfaceGraph::generate_new_tree);
+    QObject::connect(axisXY, &QRadioButton::toggled,
+                     modifier, &SurfaceGraph::enable_axisXY);
+    QObject::connect(axisXZ, &QRadioButton::toggled,
+                     modifier, &SurfaceGraph::enable_axisXZ);
+    QObject::connect(axisYZ, &QRadioButton::toggled,
+                     modifier, &SurfaceGraph::enable_axisYZ);
 
     return a.exec();
 }
