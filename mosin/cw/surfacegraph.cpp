@@ -21,12 +21,30 @@ SurfaceGraph::SurfaceGraph(Q3DSurface *surface) : m_graph(surface), m_uniform_di
 
     m_uniform_proxy = new QSurfaceDataProxy();
     m_uniform_series = new QSurface3DSeries(m_uniform_proxy);
+    m_uniform_proxy_xy = new QSurfaceDataProxy();
+    m_uniform_series_xy = new QSurface3DSeries(m_uniform_proxy_xy);
+    m_uniform_proxy_xz = new QSurfaceDataProxy();
+    m_uniform_series_xz = new QSurface3DSeries(m_uniform_proxy_xz);
+    m_uniform_proxy_yz = new QSurfaceDataProxy();
+    m_uniform_series_yz = new QSurface3DSeries(m_uniform_proxy_yz);
 
     m_normal_proxy = new QSurfaceDataProxy();
     m_normal_series = new QSurface3DSeries(m_normal_proxy);
+    m_normal_proxy_xy = new QSurfaceDataProxy();
+    m_normal_series_xy = new QSurface3DSeries(m_normal_proxy_xy);
+    m_normal_proxy_xz = new QSurfaceDataProxy();
+    m_normal_series_xz = new QSurface3DSeries(m_normal_proxy_xz);
+    m_normal_proxy_yz = new QSurfaceDataProxy();
+    m_normal_series_yz = new QSurface3DSeries(m_normal_proxy_yz);
 
     m_unbalanced_proxy = new QSurfaceDataProxy();
     m_unbalanced_series = new QSurface3DSeries(m_unbalanced_proxy);
+    m_unbalanced_proxy_xy = new QSurfaceDataProxy();
+    m_unbalanced_series_xy = new QSurface3DSeries(m_unbalanced_proxy_xy);
+    m_unbalanced_proxy_xz = new QSurfaceDataProxy();
+    m_unbalanced_series_xz = new QSurface3DSeries(m_unbalanced_proxy_xz);
+    m_unbalanced_proxy_yz = new QSurfaceDataProxy();
+    m_unbalanced_series_yz = new QSurface3DSeries(m_unbalanced_proxy_yz);
 
     m_tree_uniform = new Tree*[treeCount];
     m_tree_normal = new Tree*[treeCount];
@@ -50,107 +68,85 @@ SurfaceGraph::~SurfaceGraph(){
     delete[] m_tree_unbalanced;
 }
 
-void SurfaceGraph::fill_uniform_proxy(){
-    double stepX = m_tree_uniform[treeCount - 1]->get_count() / (double)(m_tree_uniform[treeCount - 1]->get_count() - 1);
-    double stepZ = m_tree_uniform[treeCount - 1]->get_count() / (double)(m_tree_uniform[treeCount - 1]->get_length() - 1);
+void SurfaceGraph::fill_proxy(Tree **tree, QSurfaceDataProxy *xyz, QSurfaceDataProxy *xy, QSurfaceDataProxy *xz, QSurfaceDataProxy *yz){
+    double stepX = tree[treeCount - 1]->get_count() / (double)(tree[treeCount - 1]->get_count() - 1);
+    double stepZ = tree[treeCount - 1]->get_count() / (double)(tree[treeCount - 1]->get_length() - 1);
     QSurfaceDataArray *dataArray = new QSurfaceDataArray;
+    QSurfaceDataArray *dataArray_xy = new QSurfaceDataArray;
+    QSurfaceDataArray *dataArray_xz = new QSurfaceDataArray;
+    QSurfaceDataArray *dataArray_yz = new QSurfaceDataArray;
     dataArray->reserve(treeCount);
+    dataArray_xy->reserve(treeCount);
+    dataArray_xz->reserve(treeCount);
+    dataArray_yz->reserve(treeCount);
     for (int i = 0 ; i < treeCount ; i++) {
-        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount*4);
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount);
+        QSurfaceDataRow *newRow_xy = new QSurfaceDataRow(treeCount);
+        QSurfaceDataRow *newRow_xz = new QSurfaceDataRow(treeCount);
+        QSurfaceDataRow *newRow_yz = new QSurfaceDataRow(treeCount);
         float x, y, z;
-        if(m_tree_unbalanced[treeCount - 1]->get_count()){
-            x = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_uniform[i]->get_count() * stepX);
+        if(tree[treeCount - 1]->get_count()){
+            x = qMin((double)tree[treeCount - 1]->get_count(), tree[i]->get_count() * stepX);
         }
         else{
-            x = qMin((double)m_tree_uniform[treeCount - 1]->get_count(), m_tree_uniform[i]->get_count() * stepX);
+            x = qMin((double)tree[treeCount - 1]->get_count(), tree[i]->get_count() * stepX);
         }
         int index = 0;
         for(int j = 0; j < treeCount; j++){
-            if(m_tree_unbalanced[treeCount - 1]->get_worst_time()){
-                y = qMin(m_tree_unbalanced[treeCount - 1]->get_worst_time(), m_tree_uniform[i]->get_worst_time());
+            if(tree[treeCount - 1]->get_worst_time()){
+                y = qMin(tree[treeCount - 1]->get_worst_time(), tree[i]->get_worst_time());
             }
             else{
-                y = qMin(m_tree_uniform[treeCount - 1]->get_worst_time(), m_tree_uniform[i]->get_worst_time());
+                y = qMin(tree[treeCount - 1]->get_worst_time(), tree[i]->get_worst_time());
             }
-            if(m_tree_unbalanced[treeCount - 1]->get_count()){
-                z = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_uniform[i]->get_length() * stepZ);
+            if(tree[treeCount - 1]->get_count()){
+                z = qMin((double)tree[treeCount - 1]->get_count(), tree[i]->get_length() * stepZ);
             }
             else{
-                z = qMin((double)m_tree_uniform[treeCount - 1]->get_count(), m_tree_uniform[i]->get_length() * stepZ);
+                z = qMin((double)tree[treeCount - 1]->get_count(), tree[i]->get_length() * stepZ);
             }
             (*newRow)[index++].setPosition(QVector3D(x, y, z));
+            (*newRow_xy)[index-1].setPosition(QVector3D(x, y, tree[treeCount - 1]->get_count()));
+            (*newRow_xz)[index-1].setPosition(QVector3D(x, 0, z));
+            (*newRow_yz)[index-1].setPosition(QVector3D(0, y, z));
         }
         *dataArray << newRow;
+        *dataArray_xy << newRow_xy;
+        *dataArray_xz << newRow_xz;
+        *dataArray_yz << newRow_yz;
     }
-    m_uniform_proxy->resetArray(dataArray);
-}
-
-void SurfaceGraph::fill_normal_proxy(){
-    double stepX = m_tree_normal[treeCount - 1]->get_count() / (double)(m_tree_normal[treeCount - 1]->get_count() - 1);
-    double stepZ = m_tree_normal[treeCount - 1]->get_count() / (double)(m_tree_normal[treeCount - 1]->get_length() - 1);
-    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-    dataArray->reserve(treeCount);
-    for (int i = 0 ; i < treeCount ; i++) {
-        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount);
-        float x, y, z;
-        if(m_tree_unbalanced[treeCount - 1]->get_count()){
-            x = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_normal[i]->get_count() * stepX);
-        }
-        else{
-            x = qMin((double)m_tree_normal[treeCount - 1]->get_count(), m_tree_normal[i]->get_count() * stepX);
-        }
-        int index = 0;
-        for(int j = 0; j < treeCount; j++){
-            if(m_tree_unbalanced[treeCount - 1]->get_worst_time()){
-                y = qMin(m_tree_unbalanced[treeCount - 1]->get_worst_time(), m_tree_normal[i]->get_worst_time());
-            }
-            else{
-                y = qMin(m_tree_normal[treeCount - 1]->get_worst_time(), m_tree_normal[i]->get_worst_time());
-            }
-            if(m_tree_unbalanced[treeCount - 1]->get_count()){
-                z = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_normal[i]->get_length() * stepZ);
-            }
-            else{
-                z = qMin((double)m_tree_normal[treeCount - 1]->get_count(), m_tree_normal[i]->get_length() * stepZ);
-            }
-            (*newRow)[index++].setPosition(QVector3D(x, y, z));;
-        }
-        *dataArray << newRow;
-    }
-    m_normal_proxy->resetArray(dataArray);
-}
-
-void SurfaceGraph::fill_unbalanced_proxy(){
-    double stepX = m_tree_unbalanced[treeCount - 1]->get_count() / (double)(m_tree_unbalanced[treeCount - 1]->get_count() - 1);
-    double stepZ = m_tree_unbalanced[treeCount - 1]->get_count() / (double)(m_tree_unbalanced[treeCount - 1]->get_length() - 1);
-    QSurfaceDataArray *dataArray = new QSurfaceDataArray;
-    dataArray->reserve(treeCount);
-    for (int i = 0 ; i < treeCount ; i++) {
-        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount);
-        float x = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_unbalanced[i]->get_count() * stepX);
-        int index = 0;
-        for(int j = 0; j < treeCount; j++){
-            float y = qMin(m_tree_unbalanced[treeCount - 1]->get_worst_time(), m_tree_unbalanced[i]->get_worst_time());
-            float z = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_unbalanced[i]->get_length() * stepZ);
-            (*newRow)[index++].setPosition(QVector3D(x, y, z));;
-        }
-        *dataArray << newRow;
-    }
-    m_unbalanced_proxy->resetArray(dataArray);
+    xyz->resetArray(dataArray);
+    xy->resetArray(dataArray_xy);
+    xz->resetArray(dataArray_xz);
+    yz->resetArray(dataArray_yz);
 }
 
 void SurfaceGraph::enable_uniform_distribution(bool enable){
     if(enable){
+        if(m_normal_distribution){
+            m_graph->removeSeries(m_normal_series);
+            m_graph->removeSeries(m_normal_series_xy);
+            m_graph->removeSeries(m_normal_series_xz);
+            m_graph->removeSeries(m_normal_series_yz);
+            m_normal_distribution = false;
+        }
+        if(m_unbalanced_distribution){
+            m_graph->removeSeries(m_unbalanced_series);
+            m_graph->removeSeries(m_unbalanced_series_xy);
+            m_graph->removeSeries(m_unbalanced_series_xz);
+            m_graph->removeSeries(m_unbalanced_series_yz);
+            m_unbalanced_distribution = false;
+        }
         m_uniform_distribution = true;
-        m_normal_distribution = false;
-        m_unbalanced_distribution = false;
 
-        m_uniform_series->setDrawMode(QSurface3DSeries::DrawSurface);
+        m_uniform_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
         m_uniform_series->setFlatShadingEnabled(true);
+        m_uniform_series->setBaseColor(QColor(100, 0, 0, 255));
 
-        m_graph->removeSeries(m_normal_series);
-        m_graph->removeSeries(m_unbalanced_series);
         m_graph->addSeries(m_uniform_series);
+        m_graph->addSeries(m_uniform_series_xy);
+        m_graph->addSeries(m_uniform_series_xz);
+        m_graph->addSeries(m_uniform_series_yz);
 
         if(m_tree_unbalanced[treeCount - 1]->get_count() > 1.0f){
             m_graph->axisX()->setRange(0.0f, m_tree_unbalanced[treeCount - 1]->get_count());
@@ -169,20 +165,31 @@ void SurfaceGraph::enable_uniform_distribution(bool enable){
     }
 }
 
-#include <iostream>
-
 void SurfaceGraph::enable_normal_distributinon(bool enable){
     if(enable){
-        m_uniform_distribution = false;
+        if(m_uniform_distribution){
+            m_graph->removeSeries(m_uniform_series);
+            m_graph->removeSeries(m_uniform_series_xy);
+            m_graph->removeSeries(m_uniform_series_xz);
+            m_graph->removeSeries(m_uniform_series_yz);
+            m_uniform_distribution = false;
+        }
+        if(m_unbalanced_distribution){
+            m_graph->removeSeries(m_unbalanced_series);
+            m_graph->removeSeries(m_unbalanced_series_xy);
+            m_graph->removeSeries(m_unbalanced_series_xz);
+            m_graph->removeSeries(m_unbalanced_series_yz);
+            m_unbalanced_distribution = false;
+        }
         m_normal_distribution = true;
-        m_unbalanced_distribution = false;
 
         m_normal_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
         m_normal_series->setFlatShadingEnabled(true);
 
-        m_graph->removeSeries(m_uniform_series);
-        m_graph->removeSeries(m_unbalanced_series);
         m_graph->addSeries(m_normal_series);
+        m_graph->addSeries(m_normal_series_xy);
+        m_graph->addSeries(m_normal_series_xz);
+        m_graph->addSeries(m_normal_series_yz);
 
         if(m_tree_unbalanced[treeCount - 1]->get_count() > 1.0f){
             m_graph->axisX()->setRange(0.0f, m_tree_unbalanced[treeCount - 1]->get_count());
@@ -203,17 +210,29 @@ void SurfaceGraph::enable_normal_distributinon(bool enable){
 
 void SurfaceGraph::enable_unbalanced_distribution(bool enable){
     if(enable){
-        m_uniform_distribution = false;
-        m_normal_distribution = false;
+        if(m_uniform_distribution){
+            m_graph->removeSeries(m_uniform_series);
+            m_graph->removeSeries(m_uniform_series_xy);
+            m_graph->removeSeries(m_uniform_series_xz);
+            m_graph->removeSeries(m_uniform_series_yz);
+            m_uniform_distribution = false;
+        }
+        if(m_normal_distribution){
+            m_graph->removeSeries(m_normal_series);
+            m_graph->removeSeries(m_normal_series_xy);
+            m_graph->removeSeries(m_normal_series_xz);
+            m_graph->removeSeries(m_normal_series_yz);
+            m_normal_distribution = false;
+        }
         m_unbalanced_distribution = true;
 
         m_unbalanced_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
         m_unbalanced_series->setFlatShadingEnabled(true);
-        m_unbalanced_series->setBaseColor(QColor(QRgb(0x209fdf)));
 
-        m_graph->removeSeries(m_uniform_series);
-        m_graph->removeSeries(m_normal_series);
         m_graph->addSeries(m_unbalanced_series);
+        m_graph->addSeries(m_unbalanced_series_xy);
+        m_graph->addSeries(m_unbalanced_series_xz);
+        m_graph->addSeries(m_unbalanced_series_yz);
 
         if(m_tree_unbalanced[treeCount - 1]->get_count() > 1.0f){
             m_graph->axisX()->setRange(0.0f, m_tree_unbalanced[treeCount - 1]->get_count());
@@ -234,9 +253,8 @@ void SurfaceGraph::generate_new_tree(){
                 }
                 m_tree_uniform[i]->update_length();
                 m_tree_uniform[i]->update_worst_time();
-//                std::cout << m_tree_uniform[i]->get_count() << " " << m_tree_uniform[i]->get_length() << std::endl;
             }
-            fill_uniform_proxy();
+            fill_proxy(m_tree_uniform, m_uniform_proxy, m_uniform_proxy_xy, m_uniform_proxy_xz, m_uniform_proxy_yz);
             enable_uniform_distribution(true);
         }
     else if(m_normal_distribution){
@@ -247,9 +265,8 @@ void SurfaceGraph::generate_new_tree(){
             }
             m_tree_normal[i]->update_length();
             m_tree_normal[i]->update_worst_time();
-//            std::cout << m_tree_normal[i]->get_count() << " " << m_tree_normal[i]->get_length() << std::endl;
         }
-        fill_normal_proxy();
+        fill_proxy(m_tree_normal, m_normal_proxy, m_normal_proxy_xy, m_normal_proxy_xz, m_normal_proxy_yz);
         enable_normal_distributinon(true);
     }
     else if(m_unbalanced_distribution){
@@ -260,9 +277,8 @@ void SurfaceGraph::generate_new_tree(){
             }
             m_tree_unbalanced[i]->update_length();
             m_tree_unbalanced[i]->update_worst_time();
-//            std::cout << m_tree_unbalanced[i]->get_count() << " " << m_tree_unbalanced[i]->get_length() << std::endl;
         }
-        fill_unbalanced_proxy();
+        fill_proxy(m_tree_unbalanced, m_unbalanced_proxy, m_unbalanced_proxy_xy, m_unbalanced_proxy_xz, m_unbalanced_proxy_yz);
         enable_unbalanced_distribution(true);
     }
 }
