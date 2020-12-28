@@ -3,10 +3,11 @@
 const int treeCount = 10;
 
 SurfaceGraph::SurfaceGraph(Q3DSurface *surface) : m_graph(surface), m_uniform_distribution(false), m_normal_distribution(false), m_unbalanced_distribution(false){
+    m_graph->setOrthoProjection(true);
     m_graph->axisX()->setRange(0.0f, 1.0f);
     m_graph->axisX()->setTitle(QStringLiteral("x = data count"));
     m_graph->axisX()->setTitleVisible(true);
-    m_graph->axisX()->setLabelAutoRotation(30);
+    m_graph->axisX()->setLabelAutoRotation(90);
 
     m_graph->axisY()->setRange(0.0f, 1.0f);
     m_graph->axisY()->setTitle(QStringLiteral("y = worst time to find the most depp element"));
@@ -16,7 +17,7 @@ SurfaceGraph::SurfaceGraph(Q3DSurface *surface) : m_graph(surface), m_uniform_di
     m_graph->axisZ()->setRange(0.0f, 1.0f);
     m_graph->axisZ()->setTitle(QStringLiteral("z = operation count"));
     m_graph->axisZ()->setTitleVisible(true);
-    m_graph->axisZ()->setLabelAutoRotation(30);
+    m_graph->axisZ()->setLabelAutoRotation(90);
 
     m_uniform_proxy = new QSurfaceDataProxy();
     m_uniform_series = new QSurface3DSeries(m_uniform_proxy);
@@ -55,7 +56,7 @@ void SurfaceGraph::fill_uniform_proxy(){
     QSurfaceDataArray *dataArray = new QSurfaceDataArray;
     dataArray->reserve(treeCount);
     for (int i = 0 ; i < treeCount ; i++) {
-        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount);
+        QSurfaceDataRow *newRow = new QSurfaceDataRow(treeCount*4);
         float x, y, z;
         if(m_tree_unbalanced[treeCount - 1]->get_count()){
             x = qMin((double)m_tree_unbalanced[treeCount - 1]->get_count(), m_tree_uniform[i]->get_count() * stepX);
@@ -77,7 +78,7 @@ void SurfaceGraph::fill_uniform_proxy(){
             else{
                 z = qMin((double)m_tree_uniform[treeCount - 1]->get_count(), m_tree_uniform[i]->get_length() * stepZ);
             }
-            (*newRow)[index++].setPosition(QVector3D(x, y, z));;
+            (*newRow)[index++].setPosition(QVector3D(x, y, z));
         }
         *dataArray << newRow;
     }
@@ -144,8 +145,8 @@ void SurfaceGraph::enable_uniform_distribution(bool enable){
         m_normal_distribution = false;
         m_unbalanced_distribution = false;
 
-        m_normal_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
-        m_normal_series->setFlatShadingEnabled(true);
+        m_uniform_series->setDrawMode(QSurface3DSeries::DrawSurface);
+        m_uniform_series->setFlatShadingEnabled(true);
 
         m_graph->removeSeries(m_normal_series);
         m_graph->removeSeries(m_unbalanced_series);
@@ -206,8 +207,9 @@ void SurfaceGraph::enable_unbalanced_distribution(bool enable){
         m_normal_distribution = false;
         m_unbalanced_distribution = true;
 
-        m_normal_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
-        m_normal_series->setFlatShadingEnabled(true);
+        m_unbalanced_series->setDrawMode(QSurface3DSeries::DrawSurfaceAndWireframe);
+        m_unbalanced_series->setFlatShadingEnabled(true);
+        m_unbalanced_series->setBaseColor(QColor(QRgb(0x209fdf)));
 
         m_graph->removeSeries(m_uniform_series);
         m_graph->removeSeries(m_normal_series);
@@ -262,5 +264,23 @@ void SurfaceGraph::generate_new_tree(){
         }
         fill_unbalanced_proxy();
         enable_unbalanced_distribution(true);
+    }
+}
+
+void SurfaceGraph::enable_axisXY(bool enable){
+    if(enable){
+        m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetDirectlyBelow);
+    }
+}
+
+void SurfaceGraph::enable_axisXZ(bool enable){
+    if(enable){
+        m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetDirectlyAbove);
+    }
+}
+
+void SurfaceGraph::enable_axisYZ(bool enable){
+    if(enable){
+        m_graph->scene()->activeCamera()->setCameraPreset(Q3DCamera::CameraPresetRightLow);
     }
 }
