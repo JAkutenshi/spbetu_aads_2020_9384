@@ -14,7 +14,6 @@
 #include <QFileDialog>
 #include <string>
 #include <sstream>
-#include <vector>
 
 namespace Ui {
 class StartMenu;
@@ -52,7 +51,6 @@ private:
 
     Treap<int>* treap;
 
-    std::vector<int> arrayelem;
     std::string info;
     int* array, *curr_array;
     int arraysize, curr_arraysize, del_arraysize = 0,curr_del = 0,curr_del_last = 0, time_array[10000], del_array[10000];

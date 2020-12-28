@@ -85,6 +85,7 @@ void StartMenu::on_add_clicked()
 {
     int temp = ui->spinBox->value();
     QElapsedTimer timer;
+    std::string temparray;
     if (newprior){
         timer.start();
         treap->insert(temp, rand());
@@ -96,6 +97,8 @@ void StartMenu::on_add_clicked()
     }
     int tmr = timer.nsecsElapsed();
     time_array[curr_arraysize++] = tmr;
+    treap->info_expand(temparray);
+    setArray(temparray);
     setChart();
     scene->clear();
     treap->drawTree(scene, curr_arraysize);
@@ -104,38 +107,49 @@ void StartMenu::on_add_clicked()
 void StartMenu::on_deleteb_clicked()
 {
     QElapsedTimer timer;
+    std::string temparray;
+    bool exist = false;
     if (curr_arraysize == 0) return;
     switch (ui->comboBox->currentIndex()) {
     case 0:
         timer.start();
-        treap->erase(curr_array[curr_del++]);
+        treap->erase(curr_array[0]);
         del_array[del_arraysize++] = timer.nsecsElapsed();
+        curr_arraysize--;
         break;
     case 1:
+        for (int i = 0; i < curr_arraysize; i++){
+            if (ui->delbox->value() == curr_array[i])
+                exist = true;
+        }
+        if (!exist) return;
         timer.start();
         treap->erase(ui->delbox->value());
         del_array[del_arraysize++] = timer.nsecsElapsed();
+        curr_arraysize--;
         break;
     case 2:
         timer.start();
         treap->erase(curr_array[curr_arraysize-1]);
         del_array[del_arraysize++] = timer.nsecsElapsed();
+        curr_arraysize--;
         break;
     }
+    treap->info_expand(temparray);
+    setArray(temparray);
+    setChart();
     setDelChart();
-    if (curr_arraysize == 1)
-        scene->clear();
-    treap->drawTree(scene, --curr_arraysize);
+    scene->clear();
+    treap->drawTree(scene, curr_arraysize);
 }
 
 void StartMenu::setArray(std::string str)
 {
     std::stringstream ss;
-    curr_array = new int[arraysize];
+    curr_array = new int[curr_arraysize];
     ss << str;
-    for (int i = 0; i < arraysize; i++)
+    for (int i = 0; i < curr_arraysize; i++)
         ss >> curr_array[i];
-    std::cout << curr_array[0] << std::endl;
 }
 
 void StartMenu::setChart()
@@ -199,6 +213,7 @@ void StartMenu::generate(T *array, size_t s, std::string info, bool prior)
             time_array[t] = temp;
             tmr += temp;
         }
+    curr_arraysize = arraysize;
     treap->info_expand(info);
     treap->info_expand(temparray);
     setArray(temparray);
@@ -207,7 +222,6 @@ void StartMenu::generate(T *array, size_t s, std::string info, bool prior)
     info.append(" nanoseconds");
     ui->textBrowser->setText(QString::fromStdString(info));
     treap->drawTree(scene, arraysize);
-    curr_arraysize = arraysize;
     curr_del_last = arraysize;
     setChart();
     chart2->removeAllSeries();

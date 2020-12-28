@@ -39,7 +39,6 @@ public:
     void drawTree(QGraphicsScene *scene, int size)
     {
         sz = 2*std::log2(size);
-        std::cout << sz << std::endl;
         draw(scene, root, 0);
     }
 
