@@ -19,6 +19,10 @@ public:
     void enable_unbalanced_distribution(bool enable);
     void generate_new_tree();
 
+    void enable_axisXY(bool enable);
+    void enable_axisXZ(bool enable);
+    void enable_axisYZ(bool enable);
+
 private:
     void fill_uniform_proxy();
     void fill_normal_proxy();
