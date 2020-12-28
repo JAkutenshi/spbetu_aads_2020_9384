@@ -34,13 +34,13 @@ void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *s
     auto end = std::chrono::steady_clock::now();
     auto diff = end - start;
 
-    series1->append(text.size(),std::chrono::duration <double, std::milli> (diff).count());
+    series1->append(text.size(),std::chrono::duration <double, std::nano> (diff).count());
 
     auto start2 = std::chrono::steady_clock::now();
     encode(root,EMPTY_STRING);
     auto end2 = std::chrono::steady_clock::now();
     auto diff2 = end2 - start2;
-    series2->append(text.size(), std::chrono::duration <double, std::milli> (diff2).count());
+    series2->append(text.size(), std::chrono::duration <double, std::nano> (diff2).count());
 
     srand(time(NULL));
     std::string stringNew;
@@ -57,7 +57,7 @@ void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *s
     }
     auto end3 = std::chrono::steady_clock::now();
     auto diff3 = end3 - start3;
-    series3->append(text.size(), std::chrono::duration <double, std::milli> (diff3).count());
+    series3->append(text.size(), std::chrono::duration <double, std::nano> (diff3).count());
 }
 
 void HuffmanTree::encode(HuffmanTree::Node *root, std::string str) {
