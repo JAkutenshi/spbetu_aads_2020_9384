@@ -24,23 +24,21 @@ public:
     void enable_axisYZ(bool enable);
 
 private:
-    void fill_uniform_proxy();
-    void fill_normal_proxy();
-    void fill_unbalanced_proxy();
+    void fill_proxy(Tree **tree, QSurfaceDataProxy *xyz, QSurfaceDataProxy *xy, QSurfaceDataProxy *xz, QSurfaceDataProxy *yz);
 
 private:
     Q3DSurface *m_graph;
 
-    QSurfaceDataProxy *m_uniform_proxy;
-    QSurface3DSeries *m_uniform_series;
+    QSurfaceDataProxy *m_uniform_proxy, *m_uniform_proxy_xy, *m_uniform_proxy_xz, *m_uniform_proxy_yz;
+    QSurface3DSeries *m_uniform_series, *m_uniform_series_xy, *m_uniform_series_xz, *m_uniform_series_yz;
     bool m_uniform_distribution;
 
-    QSurfaceDataProxy *m_normal_proxy;
-    QSurface3DSeries *m_normal_series;
+    QSurfaceDataProxy *m_normal_proxy, *m_normal_proxy_xy, *m_normal_proxy_xz, *m_normal_proxy_yz;
+    QSurface3DSeries *m_normal_series, *m_normal_series_xy, *m_normal_series_xz, *m_normal_series_yz;
     bool m_normal_distribution;
 
-    QSurfaceDataProxy *m_unbalanced_proxy;
-    QSurface3DSeries *m_unbalanced_series;
+    QSurfaceDataProxy *m_unbalanced_proxy, *m_unbalanced_proxy_xy, *m_unbalanced_proxy_xz, *m_unbalanced_proxy_yz;
+    QSurface3DSeries *m_unbalanced_series, *m_unbalanced_series_xy, *m_unbalanced_series_xz, *m_unbalanced_series_yz;
     bool m_unbalanced_distribution;
 
     Tree **m_tree_uniform;
