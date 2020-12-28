@@ -4,8 +4,19 @@ const int treeCount = 10;
 
 SurfaceGraph::SurfaceGraph(Q3DSurface *surface) : m_graph(surface), m_uniform_distribution(false), m_normal_distribution(false), m_unbalanced_distribution(false){
     m_graph->axisX()->setRange(0.0f, 1.0f);
+    m_graph->axisX()->setTitle(QStringLiteral("x = data count"));
+    m_graph->axisX()->setTitleVisible(true);
+    m_graph->axisX()->setLabelAutoRotation(30);
+
     m_graph->axisY()->setRange(0.0f, 1.0f);
+    m_graph->axisY()->setTitle(QStringLiteral("y = worst time to find the most depp element"));
+    m_graph->axisY()->setTitleVisible(true);
+    m_graph->axisY()->setLabelAutoRotation(90);
+
     m_graph->axisZ()->setRange(0.0f, 1.0f);
+    m_graph->axisZ()->setTitle(QStringLiteral("z = operation count"));
+    m_graph->axisZ()->setTitleVisible(true);
+    m_graph->axisZ()->setLabelAutoRotation(30);
 
     m_uniform_proxy = new QSurfaceDataProxy();
     m_uniform_series = new QSurface3DSeries(m_uniform_proxy);
@@ -154,9 +165,6 @@ void SurfaceGraph::enable_uniform_distribution(bool enable){
         else if(m_tree_uniform[treeCount - 1]->get_worst_time() > 1.0f){
             m_graph->axisY()->setRange(0.0f, m_tree_uniform[treeCount - 1]->get_worst_time());
         }
-        m_graph->axisX()->setLabelAutoRotation(30);
-        m_graph->axisY()->setLabelAutoRotation(90);
-        m_graph->axisZ()->setLabelAutoRotation(30);
     }
 }
 
@@ -189,9 +197,6 @@ void SurfaceGraph::enable_normal_distributinon(bool enable){
         else if(m_tree_normal[treeCount - 1]->get_worst_time() > 1.0f){
             m_graph->axisY()->setRange(0.0f, m_tree_normal[treeCount - 1]->get_worst_time());
         }
-        m_graph->axisX()->setLabelAutoRotation(30);
-        m_graph->axisY()->setLabelAutoRotation(90);
-        m_graph->axisZ()->setLabelAutoRotation(30);
     }
 }
 
@@ -215,9 +220,6 @@ void SurfaceGraph::enable_unbalanced_distribution(bool enable){
         if(m_tree_unbalanced[treeCount - 1]->get_worst_time() > 1.0f){
             m_graph->axisY()->setRange(0.0f, m_tree_unbalanced[treeCount - 1]->get_worst_time());
         }
-        m_graph->axisX()->setLabelAutoRotation(30);
-        m_graph->axisY()->setLabelAutoRotation(90);
-        m_graph->axisZ()->setLabelAutoRotation(30);
     }
 }
 
@@ -230,7 +232,7 @@ void SurfaceGraph::generate_new_tree(){
                 }
                 m_tree_uniform[i]->update_length();
                 m_tree_uniform[i]->update_worst_time();
-                std::cout << m_tree_uniform[i]->get_count() << " " << m_tree_uniform[i]->get_length() << std::endl;
+//                std::cout << m_tree_uniform[i]->get_count() << " " << m_tree_uniform[i]->get_length() << std::endl;
             }
             fill_uniform_proxy();
             enable_uniform_distribution(true);
@@ -243,7 +245,7 @@ void SurfaceGraph::generate_new_tree(){
             }
             m_tree_normal[i]->update_length();
             m_tree_normal[i]->update_worst_time();
-            std::cout << m_tree_normal[i]->get_count() << " " << m_tree_normal[i]->get_length() << std::endl;
+//            std::cout << m_tree_normal[i]->get_count() << " " << m_tree_normal[i]->get_length() << std::endl;
         }
         fill_normal_proxy();
         enable_normal_distributinon(true);
@@ -256,7 +258,7 @@ void SurfaceGraph::generate_new_tree(){
             }
             m_tree_unbalanced[i]->update_length();
             m_tree_unbalanced[i]->update_worst_time();
-            std::cout << m_tree_unbalanced[i]->get_count() << " " << m_tree_unbalanced[i]->get_length() << std::endl;
+//            std::cout << m_tree_unbalanced[i]->get_count() << " " << m_tree_unbalanced[i]->get_length() << std::endl;
         }
         fill_unbalanced_proxy();
         enable_unbalanced_distribution(true);
