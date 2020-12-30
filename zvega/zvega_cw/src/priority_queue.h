@@ -1,6 +1,9 @@
 #ifndef PRIORITY_QUEUE_H
 #define PRIORITY_QUEUE_H
 #include <utility>
+#include <iostream>
+
+using namespace std;
 
 template <typename T>
 struct PriorityQueueItem {
@@ -47,7 +50,7 @@ bool push(PriorityQueue<T>* pq, int key, const T& data)
 	pq->heap_[pq->size_].key = key;
 	pq->heap_[pq->size_].data = data;
 	pq->size_++;
-	sift_up(pq, pq->size_ - 1);
+    sift_up(pq, pq->size_ - 1);
 	return true;
 }
 template <typename T>

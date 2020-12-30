@@ -9,7 +9,12 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
+    scene = new QGraphicsScene(0,0,0,0);
     ui->setupUi(this);
+    ui->graphicsView->setScene(scene);
+    QRegExp rx("[A-Z;a-z;0-9]*");
+    QRegExpValidator *validator = new QRegExpValidator(rx,this);
+    ui->lineEdit->setValidator(validator);
 }
 
 MainWindow::~MainWindow()
@@ -21,48 +26,38 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_startButtom_clicked()
 {
-    sceneTask = new QGraphicsScene(0,0,ui->Task->width(),100*20);
-    sceneCode = new QGraphicsScene(0,0,ui->code->width()*2,ui->code->height());
-    ui->Task->setScene(sceneTask);
-    ui->code->setScene(sceneCode);
     taskTable.clear();
     taskCode.clear();
     taskText.clear();
+    taskNumL.clear();
 
     taskText = ui->lineEdit->text().replace(" ","");
     if(taskText.length() <= 0)
         return;
     Tree = haffman(taskText.toStdString().c_str());
-    file.open("control.txt",ios_base::ate);
     taskCode = encode(Tree, taskText.toStdString().c_str());
-    sceneCode->addText(taskCode,QFont(taskCode.toStdString().c_str(),20));
     taskText = ui->lineEdit->text().replace(" ","");
     printTree(Tree, 0);
     printTask();
-    file << "--------------------------------------->\n";
-    file.close();
     scene->setBackgroundBrush(Qt::white);
     scene->clearSelection();
     scene->setSceneRect(scene->itemsBoundingRect());
+    haffman22(Tree, (height(Tree, 0))-1);
+    decode(Tree, taskCode.toStdString().c_str());
 }
 
 void MainWindow::printTask(){
-    file << taskText.toStdString() << endl;
-    file << "1.1. Для заданного текста определить число вхождений каждого символа." << endl;
-    file << "Ответ: \n" << taskNumL.toStdString() << endl;
-    file << "1.2. Построить упорядоченное дерево Хаффмена, имеющее минимальную высоту из всех деревьев Хаффмена.\n Надписать узлы дерева (символ(ы), число вхождений)." << endl;
-    file << "Ответ: \n" << "Дерево из программы в файле tree.png" << "\n\n";
-    file << "1.3. Выписать код Хаффмена для всех символов, входящих в текст." << endl;
-    file << "Ответ: \n" << taskTable.toStdString() << endl;
-    file << "1.4. Подсчитать длину закодированного полученным кодом текста." << endl;
-    file << "Ответ: \n" << taskCode.toStdString().length() << endl;
+    ui->n21->setText(taskNumL);
+    ui->n24->setText(taskTable);
+    ui->n25->setText(QString().setNum(taskCode.toStdString().length()));
 }
 
 CodeTree* MainWindow::haffman(const Symbol* symbols, int len)
 {
     PriorityQueue<CodeTree*>* queue = create_pq<CodeTree*>(len);
-    for (int i = 0; i < len; ++i)
+    for (int i = 0; i < len; ++i){
         push(queue, symbols[i].weight, make_leaf(symbols[i]));
+    }
     while (sizeQ(queue) > 1) {
         CodeTree* ltree = pop(queue);
         CodeTree* rtree = pop(queue);
@@ -71,6 +66,12 @@ CodeTree* MainWindow::haffman(const Symbol* symbols, int len)
         ltree->parent = node;
         rtree->parent = node;
         push(queue, weight, node);
+        if(ltree->s.c)
+            showHaffman +=  QString(ltree->s.c) + " " +QString().setNum(ltree->s.weight) + ";";
+        else{
+             showHaffman += "\n";
+        }
+
     }
     CodeTree* result = pop(queue);
     destroy_pq(queue);
@@ -93,20 +94,28 @@ CodeTree* MainWindow::haffman(const char* message) {
 }
 
 char* MainWindow::decode(const CodeTree* tree, const char* code) {
+    QString ans;
+    ans += taskCode + "\n";
     char* message = new char[MAX_CODE_LEN];
     int index = 0;
     int len = strlen(code);
     const CodeTree* v = tree;
     for (int i = 0; i < len; ++i) {
-        if (code[i] == '0')
+        if (code[i] == '0'){
+            ans += "0";
             v = v->left;
-        else
+        }
+        else{
+            ans += "1";
             v = v->right;
+        }
         if (is_leaf(v)) {
+            ans += " - " + QString(v->s.c) + "\n";
             message[index++] = v->s.c;
             v = tree;
         }
     }
+    ui->n31->setText(ans);
     message[index] = '\0';
     return message;
 }
@@ -147,7 +156,6 @@ char* MainWindow::encode(const CodeTree* tree, const char* message){
         }
 
     }
-    sceneTask->addText(taskTable,QFont(taskTable,20));
     code[index] = 0;
     delete[] symbols_map;
     return code;
@@ -221,16 +229,15 @@ void MainWindow::resizeEvent(QResizeEvent *event){
 void MainWindow::on_info_clicked()
 {
     QMessageBox::information(this, "Info", "Поддерживается только английский.\n"
-                                               "Напишите строку и нажмите ок для построения дерева.\n"
+                                               "Напишите строку и нажмите ок для получения ответов или нажмите 'random string'.\n"
                                                "В узле если это не лист показывается вес узла.\n"
                                                "В листе показывается символ узла, а над ним его вес(число вхождений символа).\n"
                                                "Если узел не лист показывается слева и справа '0' или '1'.\n"
-                                               "Задания для контроля в файле 'control.txt'.");
+                                               "Можно сохранить картинку дерева.");
 }
 
 void MainWindow::on_save_clicked()
 {
-
     QImage image(scene->sceneRect().size().toSize(), QImage::Format_ARGB32);
     image.fill(Qt::transparent);
 
@@ -241,13 +248,10 @@ void MainWindow::on_save_clicked()
 
 void MainWindow::on_random_clicked()
 {
-    sceneTask = new QGraphicsScene(0,0,ui->Task->width(),100*20);
-    sceneCode = new QGraphicsScene(0,0,ui->code->width()*2,ui->code->height());
-    ui->Task->setScene(sceneTask);
-    ui->code->setScene(sceneCode);
     taskTable.clear();
     taskCode.clear();
     taskText.clear();
+    taskNumL.clear();
 
     for(int i = 0; i < 30; i++)
             taskText.append(char('a' + rand() % ('z' - 'a')));
@@ -255,15 +259,52 @@ void MainWindow::on_random_clicked()
     if(taskText.length() <= 0)
         return;
     Tree = haffman(taskText.toStdString().c_str());
-    file.open("control.txt",ios_base::ate);
     taskCode = encode(Tree, taskText.toStdString().c_str());
-    sceneCode->addText(taskCode,QFont(taskCode.toStdString().c_str(),20));
     taskText = ui->lineEdit->text().replace(" ","");
     printTree(Tree, 0);
     printTask();
-    file << "--------------------------------------->\n";
-    file.close();
     scene->setBackgroundBrush(Qt::white);
     scene->clearSelection();
     scene->setSceneRect(scene->itemsBoundingRect());
+    haffman22(Tree, (height(Tree, 0))-1);
+    decode(Tree, taskCode.toStdString().c_str());
+}
+
+void MainWindow::haffman22(CodeTree *Tree, int index){
+    QString ans;
+    cout << index << endl;
+    for(int i = index; i >= 0; i--){
+        QString l = haffmanL(Tree->left, i);
+        QString r = haffmanL(Tree->right, i);
+        ans += l + " " + r + "\n";
+
+    }
+    ans += haffmanR(Tree) + "(" + QString().setNum(Tree->s.weight) + ")";
+    ui->n22->setText(ans);
+
+}
+QString MainWindow::haffmanL(CodeTree *Tree, int index){
+    if(!(Tree->left || Tree->right))
+        return QString(Tree->s.c) + "(" + QString().setNum(Tree->s.weight)+ ")"  ;
+    if(index == 0)
+        return haffmanR(Tree) + "(" + QString().setNum(Tree->s.weight)+ ")";// +
+                //haffmanR(Tree->left) + "(" + QString().setNum(Tree->left->s.weight)+ ")";
+    return haffmanL(Tree->left, index-1)+haffmanL(Tree->right, index-1);
+
+}
+QString MainWindow::haffmanR(CodeTree *Tree){
+    if(!(Tree->left || Tree->right))
+        return QString(Tree->s.c);
+    return haffmanR(Tree->left)+haffmanR(Tree->right);
+}
+
+int MainWindow::height(CodeTree* Tree, int index){
+    if(Tree->left || Tree->right){
+        int l = height(Tree->left, index+1);
+        int r = height(Tree->right, index+1);
+        if(r > l)
+            return r;
+        return l;
+    }
+    return index;
 }

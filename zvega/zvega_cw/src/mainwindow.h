@@ -16,8 +16,9 @@
 #include <cstring>
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <QPainter>
+#include <QRegExpValidator>
+#include <QRegExp>
 
 using namespace std;
 
@@ -33,18 +34,20 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     CodeTree *Tree;
-    CodeTree *TreeWithoutSpace;
     QString taskText;
     QString taskTable;
     QString taskCode;
     QString taskNumL;
-    ofstream file;
-    void printLine(CodeTree *, int);
-    void printLineL(CodeTree *, int, int);
-    void printLineR(CodeTree *, int, int);
+    QString showHaffman;
+    QString encodeTree(CodeTree *, int);
     void printTree(CodeTree *, int);
     void printTreeL(CodeTree *, int, int);
     void printTreeR(CodeTree *, int, int);
+
+    void haffman22(CodeTree *, int);
+    QString haffmanL(CodeTree *, int);
+    QString haffmanR(CodeTree *);
+
     void printTask();
     void resizeEvent(QResizeEvent *event);
 
@@ -52,13 +55,11 @@ public:
     CodeTree* haffman(const char* message);
     char* decode(const CodeTree* tree, const char* code);
     char* encode(const CodeTree* tree, const char* message);
+    QString n22;
 
-
-
+    int height(CodeTree *, int index);
 
     QGraphicsScene *scene;
-    QGraphicsScene *sceneTask;
-    QGraphicsScene *sceneCode;
 private slots:
     void on_startButtom_clicked();
 
