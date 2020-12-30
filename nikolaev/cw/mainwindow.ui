@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,61 +14,48 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>TreapDemonstration</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QGraphicsView" name="graphicsView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>192</height>
-         </size>
-        </property>
         <property name="dragMode">
          <enum>QGraphicsView::ScrollHandDrag</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QTextBrowser" name="textBrowser">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QPushButton" name="pushButton_2">
-        <property name="text">
-         <string>Clear</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Next</string>
-        </property>
-       </widget>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QTextBrowser" name="textBrowser">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="horizontalSlider">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout"/>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -80,107 +70,93 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuTreapDemonstratio">
+   <widget class="QMenu" name="menu">
     <property name="title">
-     <string>Project</string>
+     <string>Создание</string>
     </property>
-    <widget class="QMenu" name="menuSave_as">
+    <widget class="QMenu" name="menu_4">
      <property name="title">
-      <string>Save as</string>
+      <string>Добавить элементы</string>
      </property>
-     <widget class="QMenu" name="menuText">
-      <property name="title">
-       <string>Text</string>
-      </property>
-      <addaction name="actionPreorder"/>
-      <addaction name="actionInorder"/>
-      <addaction name="actionPostorder"/>
-     </widget>
-     <addaction name="actionImage"/>
-     <addaction name="menuText"/>
+     <addaction name="from_file"/>
+     <addaction name="from_string"/>
+     <addaction name="generate"/>
     </widget>
-    <addaction name="separator"/>
-    <addaction name="Open"/>
-    <addaction name="Enter"/>
-    <addaction name="actionGanerate"/>
-    <addaction name="separator"/>
-    <addaction name="menuSave_as"/>
+    <widget class="QMenu" name="menu_5">
+     <property name="title">
+      <string>Сохранить</string>
+     </property>
+     <widget class="QMenu" name="menu_3">
+      <property name="title">
+       <string>В Файл</string>
+      </property>
+      <addaction name="NLR"/>
+      <addaction name="LNR"/>
+      <addaction name="LRN"/>
+     </widget>
+     <addaction name="menu_3"/>
+    </widget>
+    <addaction name="menu_4"/>
+    <addaction name="menu_5"/>
    </widget>
-   <widget class="QMenu" name="menuTreap">
+   <widget class="QMenu" name="menu_2">
     <property name="title">
-     <string>Editing</string>
+     <string>Редактирование</string>
     </property>
-    <addaction name="actionEnter_Key"/>
-    <addaction name="actionErase_Key"/>
+    <addaction name="add_item"/>
+    <addaction name="delete_item"/>
    </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <addaction name="actionStep_by_step_analysis"/>
-   </widget>
-   <addaction name="menuTreapDemonstratio"/>
-   <addaction name="menuTreap"/>
-   <addaction name="menuTools"/>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="Open">
+  <action name="from_file">
    <property name="text">
-    <string>Open</string>
+    <string>Из Файла</string>
    </property>
   </action>
-  <action name="Enter">
+  <action name="from_string">
    <property name="text">
-    <string>Enter</string>
+    <string>Из Строки</string>
    </property>
   </action>
-  <action name="actionEnter_Key">
+  <action name="generate">
    <property name="text">
-    <string>Enter Key</string>
+    <string>Сгенерировать</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="add_item">
+   <property name="text">
+    <string>Добавить Элемент</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+E</string>
    </property>
   </action>
-  <action name="actionErase_Key">
+  <action name="delete_item">
    <property name="text">
-    <string>Erase Key</string>
+    <string>Удалить Элемент</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
    </property>
   </action>
-  <action name="actionGanerate">
+  <action name="NLR">
    <property name="text">
-    <string>Ganerate</string>
+    <string>Прямой обход (NLR)</string>
    </property>
   </action>
-  <action name="actionImage">
+  <action name="LNR">
    <property name="text">
-    <string>Image</string>
+    <string>Центрированный обход (LNR)</string>
    </property>
   </action>
-  <action name="actionPreorder">
+  <action name="LRN">
    <property name="text">
-    <string>Preorder </string>
-   </property>
-  </action>
-  <action name="actionInorder">
-   <property name="text">
-    <string>Inorder </string>
-   </property>
-  </action>
-  <action name="actionPostorder">
-   <property name="text">
-    <string>Postorder </string>
-   </property>
-  </action>
-  <action name="actionStep_by_step_analysis">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Step by step analysis</string>
+    <string>Обратный обход (LRN)</string>
    </property>
   </action>
  </widget>

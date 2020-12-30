@@ -1,17 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QVector>
 #include <QMessageBox>
 #include <QMainWindow>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QMessageBox>
 #include <QInputDialog>
 #include <QGraphicsScene>
 
 #include "treap.h"
-#include "graphics_view_zoom.h"
+#include "graphicsviewzoom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,35 +22,32 @@ public:
     ~MainWindow();
 
 private slots:
+    void on_from_file_triggered();
 
-    void on_Open_triggered();
+    void on_from_string_triggered();
+    
+    void on_add_item_triggered();
 
-    void on_Enter_triggered();
+    void on_delete_item_triggered();
 
-    void on_actionEnter_Key_triggered();
+    void on_horizontalSlider_sliderMoved(int position);
 
-    void on_actionErase_Key_triggered();
+    void on_generate_triggered();
 
-    void on_actionGanerate_triggered();
+    void on_NLR_triggered();
 
-    void on_actionImage_triggered();
+    void on_LNR_triggered();
 
-    void on_actionPreorder_triggered();
-
-    void on_actionInorder_triggered();
-
-    void on_actionPostorder_triggered();
-
-    void on_actionStep_by_step_analysis_triggered(bool checked);
-
-    void on_pushButton_2_clicked();
+    void on_LRN_triggered();
 
 private:
+    Ui::MainWindow* ui;
+    QGraphicsScene* scene;
+
     Treap<int> treap;
 
-    Ui::MainWindow *ui;
+    QVector<std::pair<Treap<int>*, QString>> list;
 
-    Graphics_view_zoom* zoom;
-    QGraphicsScene* scene;
+    graphicsviewzoom* zoom;
 };
 #endif // MAINWINDOW_H
