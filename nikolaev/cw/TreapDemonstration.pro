@@ -1,14 +1,3 @@
-QMAKE_EXTRA_TARGETS += before_build makefilehook
-
-makefilehook.target = $(MAKEFILE)
-makefilehook.depends = .beforebuild
-
-PRE_TARGETDEPS += .beforebuild
-
-before_build.target = .beforebuild
-before_build.depends = FORCE
-before_build.commands = chcp 1251
-
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -20,12 +9,12 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    graphics_view_zoom.cpp \
+    graphicsviewzoom.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
-    graphics_view_zoom.h \
+    graphicsviewzoom.h \
     mainwindow.h \
     treap.h
 
