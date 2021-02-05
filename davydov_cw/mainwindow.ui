@@ -14,23 +14,64 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menujkj">
+   <widget class="QMenu" name="menu">
     <property name="title">
-     <string>jkj</string>
+     <string>Задать данные для программы</string>
     </property>
+    <addaction name="action"/>
+    <addaction name="action_2"/>
+    <addaction name="action_3"/>
+    <addaction name="action_4"/>
    </widget>
-   <addaction name="menujkj"/>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Вид графа</string>
+    </property>
+    <addaction name="action_5"/>
+    <addaction name="action_6"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>Средний случай</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>Худший случай</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Лучший случай</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Ввести собственный текст</string>
+   </property>
+  </action>
+  <action name="action_5">
+   <property name="text">
+    <string>Наложить графики</string>
+   </property>
+  </action>
+  <action name="action_6">
+   <property name="text">
+    <string>Добавить графики сложностей</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

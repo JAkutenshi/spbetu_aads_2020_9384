@@ -49,8 +49,7 @@ private:
         };
 
         Node* root = nullptr;
-        std::unordered_map<char, std::string> huffmanCode;
-
+        std::map<char, std::string> huffmanCode;
         bool isLeaf(Node* root);
         Node* getNode(char ch, int freq, Node* left, Node* right);
         void encode(Node* root, std::string str = EMPTY_STRING);
@@ -62,7 +61,8 @@ private:
         };
 
 public:
-    void buildHuffmanTree(std::string text, QtCharts::QScatterSeries *series1, QtCharts::QScatterSeries *series2,QtCharts::QScatterSeries *series3);
+    void buildHuffmanTree(std::string text, QtCharts::QScatterSeries *series1, QtCharts::QScatterSeries *series2, std::vector< std::pair <int,double> > &vect,
+                          std::vector< std::pair <int,double> > &vect2, std::vector<int> &unique);
     void decode(Node* root, int &index, std::string str);
 };
 

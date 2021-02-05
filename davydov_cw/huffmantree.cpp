@@ -1,7 +1,8 @@
 #include "huffmantree.h"
-
-
-void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *series1, QtCharts::QScatterSeries *series2, QtCharts::QScatterSeries *series3){
+#include "cmath"
+#include <QDebug>
+void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *series1, QtCharts::QScatterSeries *series2,
+                                   std::vector< std::pair <int,double> > &vect, std::vector< std::pair <int,double> > &vect2, std::vector<int> &unique){
     if (text == EMPTY_STRING) {
         return;
     }
@@ -11,13 +12,14 @@ void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *s
         freq[ch]++;
     }
 
+    unique.push_back(freq.size());
+
     std::priority_queue<Node*, std::vector<Node*>, comp> pq;
 
     for (auto pair: freq) {
         pq.push(getNode(pair.first, pair.second, nullptr, nullptr));
-    }
 
-    auto start = std::chrono::steady_clock::now();
+    }
 
     while (pq.size() != 1){
         Node *left = pq.top();
@@ -31,16 +33,14 @@ void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *s
     }
 
     root = pq.top();
-    auto end = std::chrono::steady_clock::now();
-    auto diff = end - start;
 
-    series1->append(text.size(),std::chrono::duration <double, std::nano> (diff).count());
-
-    auto start2 = std::chrono::steady_clock::now();
+    auto start1 = std::chrono::steady_clock::now();
     encode(root,EMPTY_STRING);
-    auto end2 = std::chrono::steady_clock::now();
-    auto diff2 = end2 - start2;
-    series2->append(text.size(), std::chrono::duration <double, std::nano> (diff2).count());
+    auto end1 = std::chrono::steady_clock::now();
+    auto diff1 = end1 - start1;
+
+    series1->append(text.size(), std::chrono::duration <double, std::nano> (diff1).count());
+    vect.push_back(std::make_pair(text.size(),std::chrono::duration <double, std::nano> (diff1).count()));
 
     srand(time(NULL));
     std::string stringNew;
@@ -50,14 +50,22 @@ void HuffmanTree::buildHuffmanTree(std::string text, QtCharts::QScatterSeries *s
         stringNew+=huffmanCode[it->first];
     }
 
-    auto start3 = std::chrono::steady_clock::now();
+    auto start2 = std::chrono::steady_clock::now();
     int index = -1;
     while(index < (int)stringNew.size()-1){
         decode(root,index,stringNew);
     }
-    auto end3 = std::chrono::steady_clock::now();
-    auto diff3 = end3 - start3;
-    series3->append(text.size(), std::chrono::duration <double, std::nano> (diff3).count());
+    auto end2 = std::chrono::steady_clock::now();
+    auto diff2 = end2 - start2;
+    series2->append(text.size(), std::chrono::duration <double, std::nano> (diff2).count());
+    vect2.push_back(std::make_pair(text.size(),std::chrono::duration <double, std::nano> (diff2).count()));
+
+    int bitsCount = 0;
+    for (auto it = huffmanCode.begin(); it != huffmanCode.end(); ++it){
+        bitsCount+=it->second.size();
+    }
+
+    qDebug()<<"number of bits for Huffman encode: "<<bitsCount<<'\n';
 }
 
 void HuffmanTree::encode(HuffmanTree::Node *root, std::string str) {
@@ -105,3 +113,4 @@ void HuffmanTree::decode(HuffmanTree::Node *root, int &index, std::string str) {
         decode(root->right, index, str);
     }
 }
+

@@ -13,11 +13,13 @@ CONFIG += console
 SOURCES += \
     huffmantree.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    shannoncode.cpp
 
 HEADERS += \
     huffmantree.h \
-    mainwindow.h
+    mainwindow.h \
+    shannoncode.h
 
 FORMS += \
     mainwindow.ui
