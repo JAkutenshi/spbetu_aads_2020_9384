@@ -97,6 +97,11 @@ bool HuffmanTree::isLeaf(HuffmanTree::Node *root) {
 }
 
 void HuffmanTree::decode(HuffmanTree::Node *root, int &index, std::string str) {
+    if(index == -1 && isLeaf(root)){
+        index++;
+        return;
+    }
+  
     if (root == nullptr) {
         return;
     }
