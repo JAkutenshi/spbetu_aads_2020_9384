@@ -55,7 +55,7 @@ void ShannonCode::buildFunc(const std::map<char, int> map1, std::string code, in
         return;
     }
 
-    if(map1.size() == 1) shannon_code1[code + '1'] = map1.rbegin()->first;
+    if(map1.size() == 1){ shannon_code1[code + '1'] = map1.rbegin()->first; return;}
 
     int W = W2 / 2;
     int K[map1.size() + 1][W + 1];
