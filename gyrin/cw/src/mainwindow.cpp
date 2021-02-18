@@ -248,8 +248,9 @@ double MainWindow::StaticDecode_time(QString text){
     Coder<char>* result = ptr.Head->x;
     Coder<char>::CodedValue* Scode = new Coder<char>::CodedValue[amount];
     Stree.WriteCodedValue(result, Scode, index_1);
-    auto start = std::chrono::steady_clock::now();
     vector<char> static_code = Static_encode(Scode, text, amount);
+    auto start = std::chrono::steady_clock::now();
+    QString var = Static_decode(result, static_code);
     auto end = std::chrono::steady_clock::now();
     auto diff = end - start;
     return std::chrono::duration <double, std::nano> (diff).count();
@@ -392,7 +393,7 @@ void MainWindow::on_pushButton_2_clicked()
     QLineSeries* seriesPowN2 = new QLineSeries;
     seriesPowN2->setName("O(n^2)");
     // построение графиков функций
-    for(size_t i = 2; i<300; i ++)
+    for(size_t i = 2; i<600; i ++)
     {
         QString text = generateAverageCase(i);
         seriesLog1->append(i, log(i));
